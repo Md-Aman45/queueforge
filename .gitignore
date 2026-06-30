@@ -1,0 +1,32 @@
+# Maven
+target/
+
+# IntelliJ
+.idea/
+
+# VS Code
+.vscode/
+
+# Logs
+logs/
+*.log
+
+# Environment
+.env
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Java
+*.class
+
+# Build
+out/
+
+# Temporary
+tmp/
+temp/
+
+# Docker
+docker-data/
