@@ -89,6 +89,9 @@
             services/ml-service
         -->
 
+
+        <module>shared</module>
+
     </modules>
 
 </project>
