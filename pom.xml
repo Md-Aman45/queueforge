@@ -91,6 +91,7 @@
 
 
         <module>shared</module>
+        <module>services/job-service</module>
 
     </modules>
 
