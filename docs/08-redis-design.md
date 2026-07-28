@@ -1,4 +1,4 @@
-# QueueFlow - Redis Design
+# QueueForge - Redis Design
 
 ## Version
 
@@ -8,7 +8,7 @@
 
 # 1. Purpose
 
-This document defines how Redis is used within QueueFlow.
+This document defines how Redis is used within QueueForge.
 
 Redis serves as the platform's high-speed, in-memory operational datastore.
 
@@ -27,7 +27,7 @@ Redis provides:
 * Atomic operations
 * Expiration (TTL)
 
-QueueFlow uses Redis to improve system performance without replacing PostgreSQL.
+QueueForge uses Redis to improve system performance without replacing PostgreSQL.
 
 ---
 
@@ -253,7 +253,7 @@ Avoid repeated prediction requests for the same job.
 
 # 13. Redis Key Naming Convention
 
-QueueFlow follows a consistent key naming strategy.
+QueueForge follows a consistent key naming strategy.
 
 Examples
 
@@ -297,7 +297,7 @@ Persistent business data is **never** stored only in Redis.
 
 # 15. Redis Data Structures
 
-QueueFlow uses different Redis structures depending on the use case.
+QueueForge uses different Redis structures depending on the use case.
 
 | Structure  | Use Case          |
 | ---------- | ----------------- |
@@ -360,7 +360,7 @@ These enhancements are intentionally excluded from Version 1.
 
 # 19. Design Decisions
 
-QueueFlow follows these Redis design principles:
+QueueForge follows these Redis design principles:
 
 * Redis stores runtime state, not business state.
 * PostgreSQL remains the source of truth.
@@ -372,6 +372,6 @@ QueueFlow follows these Redis design principles:
 
 # Summary
 
-Redis provides QueueFlow with a high-performance operational layer that supports worker coordination, distributed locking, caching, monitoring, and runtime metrics.
+Redis provides QueueForge with a high-performance operational layer that supports worker coordination, distributed locking, caching, monitoring, and runtime metrics.
 
-By separating temporary operational data from persistent business data, QueueFlow achieves better performance, scalability, and maintainability while preserving data integrity in PostgreSQL.
+By separating temporary operational data from persistent business data, QueueForge achieves better performance, scalability, and maintainability while preserving data integrity in PostgreSQL.

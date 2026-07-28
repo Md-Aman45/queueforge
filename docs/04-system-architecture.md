@@ -1,4 +1,4 @@
-# QueueFlow - System Architecture
+# QueueForge - System Architecture
 
 ## Version
 
@@ -8,17 +8,17 @@
 
 # 1. Purpose
 
-This document describes the overall architecture of QueueFlow.
+This document describes the overall architecture of QueueForge.
 
 It explains how the major components interact, how data flows through the system, and why specific architectural decisions were made.
 
-This document serves as the High-Level Design (HLD) of the QueueFlow platform.
+This document serves as the High-Level Design (HLD) of the QueueForge platform.
 
 ---
 
 # 2. Architectural Style
 
-QueueFlow follows a combination of the following architectural patterns:
+QueueForge follows a combination of the following architectural patterns:
 
 * Microservices Architecture
 * Event-Driven Architecture
@@ -86,7 +86,7 @@ Responsibilities:
 * Route jobs
 * Publish messages to RabbitMQ
 
-The Job Service acts as the entry point of QueueFlow.
+The Job Service acts as the entry point of QueueForge.
 
 ---
 
@@ -285,7 +285,7 @@ The following architectural decisions were made:
 
 # 10. Scalability
 
-QueueFlow supports horizontal scaling.
+QueueForge supports horizontal scaling.
 
 Examples:
 
@@ -300,7 +300,7 @@ No application code changes are required to scale workers.
 
 # 11. Reliability
 
-QueueFlow ensures reliability using:
+QueueForge ensures reliability using:
 
 * Persistent job storage
 * RabbitMQ acknowledgements
@@ -380,6 +380,6 @@ Future versions may include:
 
 # Summary
 
-QueueFlow is a production-oriented distributed platform designed around event-driven communication and asynchronous job processing.
+QueueForge is a production-oriented distributed platform designed around event-driven communication and asynchronous job processing.
 
 The architecture emphasizes scalability, fault tolerance, modularity, and maintainability while providing a strong foundation for AI-powered operational assistance and Machine Learning-based optimization.

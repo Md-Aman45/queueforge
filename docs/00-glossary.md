@@ -1,4 +1,4 @@
-# QueueFlow - Glossary
+# QueueForge - Glossary
 
 ## Version
 
@@ -8,7 +8,7 @@
 
 # Purpose
 
-This glossary defines the common terms used throughout the QueueFlow project.
+This glossary defines the common terms used throughout the QueueForge project.
 
 It ensures that developers, testers, DevOps engineers, and contributors share the same understanding of the platform's architecture and terminology.
 
@@ -28,7 +28,7 @@ Once a message is acknowledged, RabbitMQ removes it from the queue.
 
 Application Programming Interface.
 
-The REST endpoints exposed by QueueFlow for creating, managing, and monitoring jobs.
+The REST endpoints exposed by QueueForge for creating, managing, and monitoring jobs.
 
 ---
 
@@ -46,7 +46,7 @@ The client receives an immediate response while the task continues in the backgr
 
 A service that receives and processes messages from RabbitMQ.
 
-In QueueFlow, all workers act as consumers.
+In QueueForge, all workers act as consumers.
 
 ---
 
@@ -77,7 +77,7 @@ These jobs require manual inspection or reprocessing.
 
 A RabbitMQ exchange that routes messages to queues using an exact routing key.
 
-QueueFlow uses a Direct Exchange for routing jobs to specialized queues.
+QueueForge uses a Direct Exchange for routing jobs to specialized queues.
 
 ---
 
@@ -131,7 +131,7 @@ Heartbeats are stored in Redis.
 
 ## Job
 
-The smallest unit of work processed by QueueFlow.
+The smallest unit of work processed by QueueForge.
 
 Examples:
 
@@ -229,7 +229,7 @@ Examples:
 
 The process of observing system health and performance.
 
-QueueFlow uses:
+QueueForge uses:
 
 * Prometheus
 * Grafana
@@ -242,7 +242,7 @@ QueueFlow uses:
 
 A service that publishes messages to RabbitMQ.
 
-In QueueFlow, the Job Service acts as the producer.
+In QueueForge, the Job Service acts as the producer.
 
 ---
 
@@ -282,7 +282,7 @@ The number of pending jobs waiting inside a queue.
 
 ---
 
-## QueueFlow
+## QueueForge
 
 An AI-powered distributed task processing platform designed for asynchronous background job execution.
 
@@ -411,4 +411,4 @@ Current AI capabilities include:
 
 This glossary should be updated whenever new architectural concepts, technologies, or platform components are introduced.
 
-Keeping terminology consistent improves collaboration, documentation quality, and maintainability across the QueueFlow project.
+Keeping terminology consistent improves collaboration, documentation quality, and maintainability across the QueueForge project.

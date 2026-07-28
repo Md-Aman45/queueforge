@@ -1,4 +1,4 @@
-# QueueFlow - Project Overview
+# QueueForge - Project Overview
 
 ## Version
 
@@ -8,9 +8,9 @@
 
 # 1. Project Vision
 
-QueueFlow is an AI-powered distributed task processing platform designed to execute long-running and resource-intensive tasks asynchronously.
+QueueForge is an AI-powered distributed task processing platform designed to execute long-running and resource-intensive tasks asynchronously.
 
-Instead of forcing applications to wait for operations such as sending emails, generating reports, processing media, or performing AI tasks, QueueFlow accepts requests, places them into message queues, and delegates execution to specialized workers.
+Instead of forcing applications to wait for operations such as sending emails, generating reports, processing media, or performing AI tasks, QueueForge accepts requests, places them into message queues, and delegates execution to specialized workers.
 
 The platform focuses on reliability, scalability, observability, and intelligent automation through Artificial Intelligence and Machine Learning.
 
@@ -40,13 +40,13 @@ Executing these operations synchronously causes:
 
 As application traffic grows, these problems become even more significant.
 
-QueueFlow solves these challenges using asynchronous, event-driven processing.
+QueueForge solves these challenges using asynchronous, event-driven processing.
 
 ---
 
 # 3. Solution
 
-QueueFlow introduces an event-driven architecture where applications submit background jobs through REST APIs.
+QueueForge introduces an event-driven architecture where applications submit background jobs through REST APIs.
 
 The platform:
 
@@ -65,7 +65,7 @@ This architecture allows applications to remain responsive while background task
 
 # 4. Objectives
 
-The primary objectives of QueueFlow are:
+The primary objectives of QueueForge are:
 
 * Build a production-grade distributed system.
 * Demonstrate asynchronous job processing.
@@ -80,7 +80,7 @@ The primary objectives of QueueFlow are:
 
 # 5. Scope
 
-QueueFlow focuses on backend infrastructure.
+QueueForge focuses on backend infrastructure.
 
 The project includes:
 
@@ -106,7 +106,7 @@ The project does not include:
 
 # 6. Target Users
 
-QueueFlow is designed for developers and backend systems rather than end users.
+QueueForge is designed for developers and backend systems rather than end users.
 
 Primary users include:
 
@@ -120,7 +120,7 @@ Primary users include:
 
 # 7. Real-World Use Cases
 
-QueueFlow can be integrated into:
+QueueForge can be integrated into:
 
 ## E-Commerce
 
@@ -204,7 +204,7 @@ The project will be considered successful when it can:
 
 # 10. Design Principles
 
-QueueFlow is built around the following engineering principles:
+QueueForge is built around the following engineering principles:
 
 * Reliability over Complexity
 * Event-Driven Communication
@@ -221,7 +221,7 @@ QueueFlow is built around the following engineering principles:
 
 # 11. Future Vision
 
-Future versions of QueueFlow may include:
+Future versions of QueueForge may include:
 
 * Kubernetes Deployment
 * Horizontal Auto Scaling

@@ -1,4 +1,4 @@
-# QueueFlow - Microservices Design
+# QueueForge - Microservices Design
 
 ## Version
 
@@ -8,7 +8,7 @@
 
 # 1. Purpose
 
-This document describes the microservices architecture of QueueFlow.
+This document describes the microservices architecture of QueueForge.
 
 It defines the responsibility, boundaries, communication, dependencies, and internal structure of each microservice.
 
@@ -18,7 +18,7 @@ The goal is to ensure that every service follows the **Single Responsibility Pri
 
 # 2. Microservices Overview
 
-QueueFlow consists of the following services:
+QueueForge consists of the following services:
 
 | Service              | Responsibility                          |
 | -------------------- | --------------------------------------- |
@@ -37,7 +37,7 @@ QueueFlow consists of the following services:
 
 ## Purpose
 
-The Job Service is the entry point of QueueFlow.
+The Job Service is the entry point of QueueForge.
 
 Every client request enters the platform through this service.
 
@@ -362,7 +362,7 @@ Examples:
 
 # 12. Service Communication
 
-QueueFlow follows a hybrid communication model.
+QueueForge follows a hybrid communication model.
 
 ## 12.1 Synchronous Communication
 
@@ -380,7 +380,7 @@ REST communication should remain minimal to reduce service coupling.
 
 ## 12.2 Asynchronous Communication
 
-Most communication inside QueueFlow is asynchronous using RabbitMQ.
+Most communication inside QueueForge is asynchronous using RabbitMQ.
 
 Examples:
 
@@ -599,7 +599,7 @@ Failure in one service should not impact unrelated services.
 
 # 19. Future Microservices
 
-Future versions of QueueFlow may introduce additional services.
+Future versions of QueueForge may introduce additional services.
 
 Examples:
 
@@ -620,7 +620,7 @@ These services are intentionally excluded from Version 1 to keep the initial pla
 
 # 20. Summary
 
-QueueFlow follows a modular microservices architecture where each service owns a single business responsibility.
+QueueForge follows a modular microservices architecture where each service owns a single business responsibility.
 
 The Job Service acts as the entry point for all requests, RabbitMQ enables asynchronous communication, specialized workers execute business logic, PostgreSQL provides persistent storage, Redis supports high-speed operational data, and AI/ML services deliver intelligent insights without impacting the core processing pipeline.
 
@@ -635,4 +635,4 @@ The architecture emphasizes:
 * Independent Deployment
 * Event-Driven Communication
 
-This microservices design forms the foundation for implementing QueueFlow as a production-grade distributed task processing platform.
+This microservices design forms the foundation for implementing QueueForge as a production-grade distributed task processing platform.

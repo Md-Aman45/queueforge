@@ -1,4 +1,4 @@
-# QueueFlow - AI Architecture
+# QueueForge - AI Architecture
 
 ## Version
 
@@ -8,7 +8,7 @@
 
 # 1. Purpose
 
-This document defines the Artificial Intelligence (AI) architecture of QueueFlow.
+This document defines the Artificial Intelligence (AI) architecture of QueueForge.
 
 It describes how AI enhances the platform by providing intelligent operational assistance, automated failure analysis, and natural language interaction.
 
@@ -18,7 +18,7 @@ The AI Service operates independently from the core job-processing pipeline and 
 
 # 2. AI Overview
 
-The AI Service is an intelligent operational assistant for QueueFlow.
+The AI Service is an intelligent operational assistant for QueueForge.
 
 Unlike workers, which execute business jobs, the AI Service analyzes system behavior and assists operators by providing explanations, recommendations, and natural language capabilities.
 
@@ -42,7 +42,7 @@ The primary objectives of the AI Service are:
 # 4. High-Level Architecture
 
 ```text
-                    QueueFlow Platform
+                    QueueForge Platform
                            │
       ┌────────────────────┼────────────────────┐
       │                    │                    │
@@ -61,7 +61,7 @@ The primary objectives of the AI Service are:
                   Gemini / OpenAI / Future LLM
 ```
 
-The AI Service collects operational data from QueueFlow, prepares contextual prompts, communicates with an LLM provider, and returns meaningful insights to users.
+The AI Service collects operational data from QueueForge, prepares contextual prompts, communicates with an LLM provider, and returns meaningful insights to users.
 
 ---
 
@@ -142,7 +142,7 @@ Responsibilities:
 
 ## 7.3 Provider Layer
 
-Acts as an abstraction between QueueFlow and external AI providers.
+Acts as an abstraction between QueueForge and external AI providers.
 
 Supported providers may include:
 
@@ -158,7 +158,7 @@ Changing the AI provider should require minimal application changes.
 
 ## 7.4 Response Parser
 
-Converts AI responses into structured objects that QueueFlow can understand.
+Converts AI responses into structured objects that QueueForge can understand.
 
 Responsibilities:
 
@@ -290,7 +290,7 @@ If the AI provider is unavailable:
 
 * Return a meaningful error message.
 * Log the incident.
-* Continue normal QueueFlow operations.
+* Continue normal QueueForge operations.
 
 AI failures must never interrupt job processing.
 
@@ -380,13 +380,13 @@ The following architectural decisions were made:
 * Redis is used for AI response caching.
 * Context is prepared before interacting with the LLM.
 * Providers are abstracted behind a common interface.
-* AI failures must not impact QueueFlow operations.
+* AI failures must not impact QueueForge operations.
 
 ---
 
 # Summary
 
-The AI Service provides intelligent operational assistance for QueueFlow by combining contextual system information with Large Language Models.
+The AI Service provides intelligent operational assistance for QueueForge by combining contextual system information with Large Language Models.
 
 Rather than executing business logic, the AI Service focuses on explaining failures, answering operational questions, assisting with job creation, and improving developer productivity.
 

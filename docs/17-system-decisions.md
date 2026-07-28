@@ -1,4 +1,4 @@
-# QueueFlow - System Decisions
+# QueueForge - System Decisions
 
 ## Version
 
@@ -8,7 +8,7 @@
 
 # 1. Purpose
 
-This document records the major architectural and technical decisions made during the design of QueueFlow.
+This document records the major architectural and technical decisions made during the design of QueueForge.
 
 Every decision explains:
 
@@ -40,7 +40,7 @@ Every architectural decision follows the same format.
 
 ### Problem
 
-QueueFlow processes multiple independent categories of background jobs.
+QueueForge processes multiple independent categories of background jobs.
 
 Examples:
 
@@ -102,7 +102,7 @@ Disadvantages
 
 ### Problem
 
-QueueFlow requires reliable asynchronous task processing.
+QueueForge requires reliable asynchronous task processing.
 
 ---
 
@@ -152,7 +152,7 @@ Advantages
 * Event replay
 * Large-scale streaming
 
-For QueueFlow, RabbitMQ better matches the project's requirements.
+For QueueForge, RabbitMQ better matches the project's requirements.
 
 ---
 
@@ -162,7 +162,7 @@ For QueueFlow, RabbitMQ better matches the project's requirements.
 
 ### Problem
 
-QueueFlow stores structured job data with relationships.
+QueueForge stores structured job data with relationships.
 
 ---
 
@@ -182,7 +182,7 @@ PostgreSQL
 
 ### Reason
 
-QueueFlow requires:
+QueueForge requires:
 
 * ACID transactions
 * Foreign keys
@@ -374,7 +374,7 @@ Adding a new processor requires creating a new implementation rather than modify
 
 ### Problem
 
-QueueFlow consists of multiple services that share common code.
+QueueForge consists of multiple services that share common code.
 
 ---
 
@@ -451,7 +451,7 @@ Keeping them separate improves maintainability and scalability.
 
 ### Problem
 
-QueueFlow requires container orchestration.
+QueueForge requires container orchestration.
 
 ---
 
@@ -655,7 +655,7 @@ Benefits:
 
 # 3. General Design Principles
 
-QueueFlow follows these engineering principles:
+QueueForge follows these engineering principles:
 
 * Simplicity before complexity
 * Reliability over optimization
@@ -672,7 +672,7 @@ QueueFlow follows these engineering principles:
 
 # 4. Future Re-evaluation
 
-Architectural decisions should be reviewed as QueueFlow evolves.
+Architectural decisions should be reviewed as QueueForge evolves.
 
 Future versions may reconsider:
 
@@ -689,7 +689,7 @@ Architectural decisions are not permanent and should evolve based on changing re
 
 # Summary
 
-QueueFlow's architecture is the result of deliberate engineering decisions rather than technology trends.
+QueueForge's architecture is the result of deliberate engineering decisions rather than technology trends.
 
 Each decision balances simplicity, scalability, maintainability, and learning objectives while keeping the platform practical for Version 1 and extensible for future releases.
 

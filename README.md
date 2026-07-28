@@ -1,10 +1,10 @@
-# QueueFlow
+# QueueForge
 
 > **AI-Powered Distributed Task Processing Platform**
 
-QueueFlow is a production-grade distributed task processing platform designed to execute long-running background tasks asynchronously.
+QueueForge is a production-grade distributed task processing platform designed to execute long-running background tasks asynchronously.
 
-Instead of blocking user requests while performing time-consuming operations such as sending emails, generating reports, processing images, or running AI tasks, QueueFlow accepts the request, places it into the appropriate queue, and processes it using specialized workers.
+Instead of blocking user requests while performing time-consuming operations such as sending emails, generating reports, processing images, or running AI tasks, QueueForge accepts the request, places it into the appropriate queue, and processes it using specialized workers.
 
 The platform is designed using modern backend engineering principles including Microservices, RabbitMQ, Redis, PostgreSQL, Docker, AI integration, and Machine Learning.
 
@@ -29,13 +29,13 @@ Examples include:
 
 Executing these tasks synchronously increases response time and reduces scalability.
 
-QueueFlow solves this problem by processing tasks asynchronously using specialized workers and intelligent routing.
+QueueForge solves this problem by processing tasks asynchronously using specialized workers and intelligent routing.
 
 ---
 
 ## 🎯 Design Principles
 
-QueueFlow is built around the following principles:
+QueueForge is built around the following principles:
 
 - Reliability over Complexity
 - Event-Driven Communication

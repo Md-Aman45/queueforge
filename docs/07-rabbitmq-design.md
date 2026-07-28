@@ -1,4 +1,4 @@
-# QueueFlow - RabbitMQ Design
+# QueueForge - RabbitMQ Design
 
 ## Version
 
@@ -8,7 +8,7 @@
 
 # 1. Purpose
 
-This document defines the RabbitMQ architecture used in QueueFlow.
+This document defines the RabbitMQ architecture used in QueueForge.
 
 It describes:
 
@@ -28,7 +28,7 @@ The goal is to ensure reliable, asynchronous, and fault-tolerant communication b
 
 # 2. Why RabbitMQ?
 
-QueueFlow performs long-running operations that should not block client requests.
+QueueForge performs long-running operations that should not block client requests.
 
 RabbitMQ provides:
 
@@ -64,12 +64,12 @@ Communication  Document     Media       Cloud       AI Worker
 
 # 4. Exchange Design
 
-QueueFlow uses a single Direct Exchange.
+QueueForge uses a single Direct Exchange.
 
 Exchange Name
 
 ```text
-queueflow.exchange
+QueueForge.exchange
 ```
 
 Type
@@ -286,7 +286,7 @@ Dead Letter Queue
 
 # 12. Acknowledgement Strategy
 
-QueueFlow uses Manual Acknowledgements.
+QueueForge uses Manual Acknowledgements.
 
 Flow
 
@@ -463,7 +463,7 @@ Future versions may introduce:
 
 # 20. Design Decisions
 
-QueueFlow adopts the following messaging principles:
+QueueForge adopts the following messaging principles:
 
 * Direct Exchange
 * Domain-Based Queues
@@ -478,8 +478,8 @@ QueueFlow adopts the following messaging principles:
 
 # Summary
 
-RabbitMQ serves as the messaging backbone of QueueFlow.
+RabbitMQ serves as the messaging backbone of QueueForge.
 
 It enables asynchronous communication between the Job Service and specialized workers while ensuring reliable delivery, fault tolerance, retry handling, and scalable message processing.
 
-This design allows QueueFlow to process background tasks efficiently without blocking client requests and forms the foundation of the platform's distributed architecture.
+This design allows QueueForge to process background tasks efficiently without blocking client requests and forms the foundation of the platform's distributed architecture.

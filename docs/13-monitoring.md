@@ -1,4 +1,4 @@
-# QueueFlow - Monitoring & Observability
+# QueueForge - Monitoring & Observability
 
 ## Version
 
@@ -8,17 +8,17 @@
 
 # 1. Purpose
 
-This document defines the monitoring and observability architecture of QueueFlow.
+This document defines the monitoring and observability architecture of QueueForge.
 
 Monitoring enables operators and developers to understand the health, performance, and operational state of the platform.
 
-QueueFlow uses monitoring to detect failures, measure system performance, identify bottlenecks, and support operational decision-making.
+QueueForge uses monitoring to detect failures, measure system performance, identify bottlenecks, and support operational decision-making.
 
 ---
 
 # 2. Monitoring Overview
 
-QueueFlow implements a complete observability solution consisting of:
+QueueForge implements a complete observability solution consisting of:
 
 * Application Metrics
 * Infrastructure Metrics
@@ -34,7 +34,7 @@ Future versions may include Distributed Tracing.
 # 3. Monitoring Architecture
 
 ```text
-              QueueFlow Platform
+              QueueForge Platform
                      │
      ┌───────────────┼────────────────┐
      │               │                │
@@ -94,7 +94,7 @@ These metrics provide insight into application performance.
 
 # 6. Job Metrics
 
-QueueFlow records operational statistics for jobs.
+QueueForge records operational statistics for jobs.
 
 Metrics include:
 
@@ -225,7 +225,7 @@ Unhealthy services report **DOWN**.
 
 # 13. Logging Strategy
 
-QueueFlow uses structured logging.
+QueueForge uses structured logging.
 
 Every log entry includes:
 
@@ -259,7 +259,7 @@ Structured logs simplify debugging and analysis.
 
 # 14. Log Levels
 
-QueueFlow uses standardized log levels.
+QueueForge uses standardized log levels.
 
 | Level | Purpose                      |
 | ----- | ---------------------------- |
@@ -275,7 +275,7 @@ Log levels should be configurable per environment.
 
 # 15. Grafana Dashboards
 
-QueueFlow provides dashboards for:
+QueueForge provides dashboards for:
 
 ### System Dashboard
 
@@ -361,7 +361,7 @@ Future versions may include:
 
 # 18. Design Principles
 
-QueueFlow follows these monitoring principles:
+QueueForge follows these monitoring principles:
 
 * Monitor every critical component.
 * Prefer metrics over assumptions.
@@ -387,6 +387,6 @@ The following monitoring decisions were made:
 
 # Summary
 
-QueueFlow implements a comprehensive observability strategy that combines metrics, health checks, structured logging, and dashboards to provide complete visibility into system behavior.
+QueueForge implements a comprehensive observability strategy that combines metrics, health checks, structured logging, and dashboards to provide complete visibility into system behavior.
 
 This architecture enables operators to monitor performance, detect failures, troubleshoot issues, and ensure reliable operation of the distributed task processing platform while supporting future enhancements such as distributed tracing and advanced alerting.
