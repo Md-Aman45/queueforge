@@ -3,8 +3,13 @@ package io.github.mdaman45.queueforge.jobservice.job.controller;
 import io.github.mdaman45.queueforge.jobservice.common.response.ApiResponse;
 import io.github.mdaman45.queueforge.jobservice.job.dto.CreateJobRequest;
 import io.github.mdaman45.queueforge.jobservice.job.dto.CreateJobResponse;
+import io.github.mdaman45.queueforge.jobservice.job.dto.JobResponse;
 import io.github.mdaman45.queueforge.jobservice.job.service.JobService;
 import jakarta.validation.Valid;
+
+import java.time.Instant;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -23,5 +28,23 @@ public class JobController {
             @Valid @RequestBody CreateJobRequest request) {
 
         return jobService.createJob(request);
+    }
+
+
+    @GetMapping("/{jobId}")
+    public ResponseEntity<ApiResponse<JobResponse>> getJobById(
+            @PathVariable String jobId
+    ) {
+
+        JobResponse response = jobService.getJobById(jobId);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        true,
+                        "Job retrieved successfully",
+                        response,
+                        Instant.now()
+                )
+        );
     }
 }
