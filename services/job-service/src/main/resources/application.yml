@@ -2,6 +2,19 @@ spring:
   application:
     name: job-service
 
+  datasource:
+    url: jdbc:postgresql://localhost:5432/queueforge
+    username: postgres
+    password: Aman@123#45PQ
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
 server:
   port: 8080
 
