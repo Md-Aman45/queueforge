@@ -1,4 +1,4 @@
-package io.github.mdaman45.queueforge.job;
+package io.github.mdaman45.queueforge.jobservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
