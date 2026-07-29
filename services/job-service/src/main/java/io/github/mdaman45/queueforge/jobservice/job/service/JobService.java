@@ -12,6 +12,8 @@ import io.github.mdaman45.queueforge.jobservice.job.repository.JobRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
+
 
 @Service
 public class JobService {
@@ -61,5 +63,19 @@ public class JobService {
                 job.getJobName(),
                 job.getStatus()
         );
+    }
+
+
+
+    public List<JobResponse> getAllJobs() {
+
+        return jobRepository.findAll()
+                .stream()
+                .map(job -> new JobResponse(
+                        job.getId(),
+                        job.getJobName(),
+                        job.getStatus()
+                ))
+                .toList();
     }
 }

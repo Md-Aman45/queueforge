@@ -8,6 +8,7 @@ import io.github.mdaman45.queueforge.jobservice.job.service.JobService;
 import jakarta.validation.Valid;
 
 import java.time.Instant;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,26 @@ public class JobController {
 
         return jobService.createJob(request);
     }
+
+
+
+
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<JobResponse>>> getAllJobs() {
+
+        List<JobResponse> jobs = jobService.getAllJobs();
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        true,
+                        "Jobs retrieved successfully",
+                        jobs,
+                        Instant.now()
+                )
+        );
+    }
+
 
 
     @GetMapping("/{jobId}")
