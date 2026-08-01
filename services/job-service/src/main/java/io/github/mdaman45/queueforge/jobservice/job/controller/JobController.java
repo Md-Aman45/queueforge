@@ -4,12 +4,14 @@ import io.github.mdaman45.queueforge.jobservice.common.response.ApiResponse;
 import io.github.mdaman45.queueforge.jobservice.job.dto.CreateJobRequest;
 import io.github.mdaman45.queueforge.jobservice.job.dto.CreateJobResponse;
 import io.github.mdaman45.queueforge.jobservice.job.dto.JobResponse;
+import io.github.mdaman45.queueforge.jobservice.job.dto.UpdateJobStatusRequest;
 import io.github.mdaman45.queueforge.jobservice.job.service.JobService;
 import jakarta.validation.Valid;
 
 import java.time.Instant;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,10 +27,12 @@ public class JobController {
     }
 
     @PostMapping
-    public ApiResponse<CreateJobResponse> createJob(
-            @Valid @RequestBody CreateJobRequest request) {
+    public ResponseEntity<ApiResponse<CreateJobResponse>> createJob(
+            @Valid 
+            @RequestBody CreateJobRequest request) {
 
-        return jobService.createJob(request);
+        ApiResponse<CreateJobResponse> response = jobService.createJob(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 
@@ -63,6 +67,30 @@ public class JobController {
                 new ApiResponse<>(
                         true,
                         "Job retrieved successfully",
+                        response,
+                        Instant.now()
+                )
+        );
+    }
+
+
+
+    @PatchMapping("/{jobId}/status")
+    public ResponseEntity<ApiResponse<JobResponse>> updateJobStatus(
+
+        @PathVariable String jobId,
+
+        @Valid
+        @RequestBody UpdateJobStatusRequest request
+
+    ) {
+
+        JobResponse response = jobService.updateJobStatus(jobId, request);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        true,
+                        "Job status updated successfully",
                         response,
                         Instant.now()
                 )

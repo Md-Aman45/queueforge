@@ -3,9 +3,9 @@ spring:
     name: job-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/queueforge
-    username: postgres
-    password: Aman@123#45PQ
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:

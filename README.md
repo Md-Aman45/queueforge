@@ -1,249 +1,274 @@
-# QueueForge
+# 🚀 QueueForge
 
-> **AI-Powered Distributed Task Processing Platform**
+> **QueueForge is an open-source, plugin-based background job execution platform designed to build reliable, scalable, and intelligent asynchronous systems.**
 
-QueueForge is a production-grade distributed task processing platform designed to execute long-running background tasks asynchronously.
+QueueForge enables developers to create, execute, monitor, and manage background jobs through a modern, extensible architecture inspired by real-world distributed systems.
 
-Instead of blocking user requests while performing time-consuming operations such as sending emails, generating reports, processing images, or running AI tasks, QueueForge accepts the request, places it into the appropriate queue, and processes it using specialized workers.
-
-The platform is designed using modern backend engineering principles including Microservices, RabbitMQ, Redis, PostgreSQL, Docker, AI integration, and Machine Learning.
+Instead of building isolated background workers for every application, QueueForge provides a reusable execution platform that can power a wide variety of workloads, including notifications, file processing, AI tasks, integrations, scheduled jobs, and custom business workflows.
 
 ---
 
-# 📖 Overview
+# 📖 Why QueueForge?
 
-Modern applications execute many expensive operations after a user action.
+Modern applications execute thousands or even millions of background jobs every day.
 
 Examples include:
 
-* Sending Emails
-* SMS Notifications
-* Push Notifications
-* PDF Generation
-* Image Processing
-* Video Processing
-* File Uploads
-* AI Tasks
-* Analytics
-* Batch Processing
+- Sending emails
+- Processing invoices
+- File conversion
+- AI inference
+- Image processing
+- Payment reconciliation
+- Data synchronization
+- Report generation
+- Webhook delivery
+- Cache refresh
+- Notification delivery
 
-Executing these tasks synchronously increases response time and reduces scalability.
+Many projects implement these jobs using custom logic, making them difficult to maintain, monitor, retry, and scale.
 
-QueueForge solves this problem by processing tasks asynchronously using specialized workers and intelligent routing.
-
----
-
-## 🎯 Design Principles
-
-QueueForge is built around the following principles:
-
-- Reliability over Complexity
-- Event-Driven Communication
-- Scalability by Design
-- AI as an Assistant, not a Dependency
-- Machine Learning for Optimization
-- Production-Ready Architecture
-- Clean Code & Clean Documentation
+QueueForge aims to solve these problems by providing a production-ready background job execution platform with a plugin-first architecture.
 
 ---
 
-# ✨ Features
+# 🎯 Vision
 
-## Core Platform
-
-* Asynchronous Background Processing
-* RabbitMQ Message Queues
-* Specialized Workers
-* Retry Mechanism
-* Dead Letter Queue (DLQ)
-* Worker Registry
-* Job Status Tracking
-* Monitoring & Metrics
-* Redis Caching
-* JWT Authentication
-* Dockerized Architecture
-
-## AI Features
-
-* AI Failure Analysis
-* AI Operations Chatbot
-* Natural Language Job Creation
-
-## Machine Learning Features
-
-* Failure Prediction
-* Worker Recommendation
-* Queue Traffic Prediction
-* Job Duration Prediction
-* Retry Time Prediction
-* Anomaly Detection
+To become an extensible background job platform that allows developers to build reliable asynchronous systems without reinventing execution infrastructure.
 
 ---
 
-# 🏗️ High-Level Architecture
+# 🚀 Mission
 
-Client Applications
+Build a developer-friendly platform that makes background job execution:
 
-↓
-
-Job Service
-
-↓
-
-RabbitMQ
-
-↓
-
-Specialized Workers
-
-↓
-
-PostgreSQL + Redis
-
-↓
-
-Monitoring
-
-↓
-
-AI & ML Services
+- Reliable
+- Extensible
+- Observable
+- Fault-tolerant
+- Intelligent
 
 ---
 
-# 🛠️ Technology Stack
+# ✨ Current Features
 
-### Backend
+## Job Management
 
-* Java
-* Spring Boot
-* Spring Security
-* Spring Data JPA
+- Create Jobs
+- Retrieve Jobs
+- Update Job Status
+- List All Jobs
 
-### Database
+## Validation
 
-* PostgreSQL
+- Bean Validation
+- Request Validation
+- Global Exception Handling
 
-### Message Broker
+## Job Lifecycle
 
-* RabbitMQ
+- Strongly Typed Job Status
+- Strongly Typed Job Type
+- State Machine Validation
 
-### Cache
+## Persistence
 
-* Redis
+- PostgreSQL
+- Spring Data JPA
+- Hibernate ORM
 
-### AI
+## Architecture
 
-* Python
-* FastAPI
-* Gemini / OpenAI
-
-### Machine Learning
-
-* Python
-* Scikit-Learn
-
-### Monitoring
-
-* Prometheus
-* Grafana
-
-### DevOps
-
-* Docker
-* Docker Compose
-* GitHub Actions
+- Multi-module Maven Project
+- Clean Layered Architecture
+- DTO Pattern
+- Repository Pattern
+- Service Layer
+- RESTful API
 
 ---
 
-# 📁 Repository Structure
+# 🏗 High-Level Architecture
 
-* docs/
-* services/
-* shared/
-* infrastructure/
-* scripts/
-* postman/
-* examples/
-* assets/
-
----
-
-# 📚 Documentation
-
-Project documentation is available inside the **docs/** directory.
-
-It includes:
-
-* Project Overview
-* Requirements
-* Architecture
-* Database Design
-* RabbitMQ Design
-* Redis Design
-* Worker Architecture
-* REST API
-* AI Architecture
-* ML Architecture
-* Deployment Guide
-* System Decisions
+```
+                Client
+                   │
+                   ▼
+            REST API Layer
+                   │
+                   ▼
+          QueueForge Core Engine
+                   │
+                   ▼
+          Job Lifecycle Manager
+                   │
+                   ▼
+             PostgreSQL Database
+```
 
 ---
 
-# 🚀 Development Roadmap
+# 🔮 Future Architecture
 
-## Version 1
-
-Core Distributed Platform
-
-* Job Service
-* RabbitMQ
-* Workers
-* Retry
-* Dead Letter Queue
-* Monitoring
-
-## Version 2
-
-Artificial Intelligence
-
-* Failure Analysis
-* Operations Chatbot
-* Natural Language Jobs
-
-## Version 3
-
-Machine Learning
-
-* Failure Prediction
-* Worker Recommendation
-* Queue Forecasting
-* Duration Prediction
-* Anomaly Detection
+```
+                Client
+                   │
+                   ▼
+              REST API
+                   │
+                   ▼
+          QueueForge Core
+                   │
+                   ▼
+           Execution Engine
+                   │
+        ┌──────────┴──────────┐
+        ▼                     ▼
+    Worker 1             Worker 2
+        │                     │
+        └──────────┬──────────┘
+                   ▼
+            Plugin Registry
+                   │
+      ┌────────────┼────────────┐
+      ▼            ▼            ▼
+ Email Plugin   HTTP Plugin   File Plugin
+```
 
 ---
 
-# 🎯 Project Goals
+# 🛠 Technology Stack
 
-* Learn Distributed Systems
-* Build Production-Grade Backend
-* Understand Event-Driven Architecture
-* Integrate AI with Backend Systems
-* Apply Machine Learning to Infrastructure
-* Demonstrate Enterprise-Level Software Design
+## Backend
+
+- Java 21
+- Spring Boot
+- Spring Data JPA
+- Hibernate
+
+## Database
+
+- PostgreSQL
+
+## Build Tool
+
+- Maven
+
+## Upcoming
+
+- RabbitMQ
+- Redis
+- Docker
+- Docker Compose
+- Prometheus
+- Grafana
+- AI Integration
+- Machine Learning
+- Kubernetes
 
 ---
 
-# 🔮 Future Enhancements
+# 📂 Project Structure
 
-* Kubernetes Deployment
-* Horizontal Auto Scaling
-* Multi-Tenant Support
-* OAuth2 Authentication
-* Web Dashboard
-* Mobile Monitoring App
+```
+QueueForge
+
+services/
+    job-service/
+
+shared/
+
+README.md
+
+QUEUEFORGE_ARCHITECTURE.md
+
+ROADMAP.md
+
+TECHNICAL_DEBT.md
+```
 
 ---
 
-# 📜 License
+# 🚧 Current Development Status
 
-This project is released under the MIT License.
+### Phase 1 — Core Platform
+
+- ✅ Job CRUD
+- ✅ Validation
+- ✅ Exception Handling
+- ✅ Job State Machine
+- ✅ Job Type
+- 🚧 Plugin Framework
+- 🚧 Execution Engine
+
+---
+
+# 🗺 Roadmap
+
+## Phase 1
+
+Core Platform
+
+- Job Lifecycle
+- Validation
+- State Machine
+- Plugin Foundation
+
+## Phase 2
+
+Execution Engine
+
+- RabbitMQ
+- Workers
+- Plugin Registry
+
+## Phase 3
+
+Reliability
+
+- Retry Engine
+- Dead Letter Queue
+- Failure Recovery
+
+## Phase 4
+
+Platform
+
+- Scheduler
+- Policy Engine
+- Metrics
+- Dashboard
+
+## Phase 5
+
+Intelligence
+
+- AI Failure Analysis
+- ML Prediction
+- Operational Insights
+
+---
+
+# 🤝 Contributing
+
+QueueForge is currently under active development.
+
+Contributions, discussions, architectural suggestions, and ideas are always welcome.
+
+---
+
+# 📄 License
+
+This project will be released under the MIT License.
+
+---
+
+# ❤️ Author
+
+**Md Aman**
+
+GitHub: https://github.com/Md-Aman45
+
+---
+
+> **QueueForge is more than a background job queue. It is a platform for building reliable asynchronous systems.**
