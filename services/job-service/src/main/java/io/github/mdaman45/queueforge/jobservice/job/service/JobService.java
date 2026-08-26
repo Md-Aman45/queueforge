@@ -2,6 +2,7 @@ package io.github.mdaman45.queueforge.jobservice.job.service;
 
 import io.github.mdaman45.queueforge.jobservice.common.response.ApiResponse;
 import io.github.mdaman45.queueforge.jobservice.exception.ResourceNotFoundException;
+import io.github.mdaman45.queueforge.jobservice.execution.service.ExecutionService;
 import io.github.mdaman45.queueforge.jobservice.job.dto.CreateJobRequest;
 import io.github.mdaman45.queueforge.jobservice.job.dto.CreateJobResponse;
 import io.github.mdaman45.queueforge.jobservice.job.dto.JobResponse;
@@ -11,6 +12,8 @@ import io.github.mdaman45.queueforge.jobservice.job.repository.JobRepository;
 import io.github.mdaman45.queueforge.jobservice.job.enums.JobStatus;
 import io.github.mdaman45.queueforge.jobservice.job.state.JobStateMachine;
 import io.github.mdaman45.queueforge.jobservice.exception.InvalidJobStateException;
+import io.github.mdaman45.queueforge.jobservice.execution.service.ExecutionService;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.stereotype.Service;
 
@@ -22,12 +25,15 @@ import java.util.List;
 public class JobService {
 
     private final JobRepository jobRepository;
+    private final ExecutionService executionService;
 
-    public JobService(JobRepository jobRepository) {
+    public JobService(JobRepository jobRepository, ExecutionService executionService) {
         this.jobRepository = jobRepository;
+        this.executionService = executionService;
     }
 
     // Creates Job...
+    @Transactional
     public ApiResponse<CreateJobResponse> createJob(CreateJobRequest request) {
 
         Job job = new Job(
@@ -37,6 +43,8 @@ public class JobService {
         );
 
         Job savedJob = jobRepository.save(job);
+
+        executionService.createInitialExecution(savedJob);
 
         CreateJobResponse response =
                 new CreateJobResponse(
