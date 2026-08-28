@@ -29,9 +29,12 @@ public class Execution {
     private Instant startedAt;
 
     private Instant completedAt;
+    
+    private Instant nextAttemptAt;
 
     @Column(length = 2000)
     private String failureReason;
+
 
     public Execution() {
     }
@@ -96,5 +99,13 @@ public class Execution {
 
     public void setFailureReason(String failureReason) {
         this.failureReason = failureReason;
+    }
+
+    public Instant getNextAttemptAt() {
+        return nextAttemptAt;
+    }
+
+    public void setNextAttemptAt(Instant nextAttemptAt) {
+        this.nextAttemptAt = nextAttemptAt;
     }
 }

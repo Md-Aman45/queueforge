@@ -28,8 +28,14 @@ public final class ExecutionStateMachine {
                             || next == ExecutionStatus.TIMED_OUT
                             || next == ExecutionStatus.CANCELLED;
 
+            case FAILED ->
+                    next == ExecutionStatus.WAITING_FOR_RETRY;
+
+            case WAITING_FOR_RETRY ->
+                    next == ExecutionStatus.STARTED
+                            || next == ExecutionStatus.CANCELLED;
+
             case SUCCEEDED,
-                 FAILED,
                  TIMED_OUT,
                  CANCELLED ->
                     false;

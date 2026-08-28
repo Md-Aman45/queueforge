@@ -25,16 +25,8 @@ public class Job {
     @Column(nullable = false)
     private JobStatus status;
 
-    @OneToOne(
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            optional = false
-    )
-    @JoinColumn(
-            name = "retry_policy_id",
-            nullable = false,
-            unique = true
-    )
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
+    @JoinColumn(name = "retry_policy_id", nullable = false, unique = true)
     private RetryPolicy retryPolicy;
 
     public Job() {

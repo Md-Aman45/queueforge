@@ -30,4 +30,37 @@ public class ExecutionService {
 
         return executionRepository.save(execution);
     }
+
+    public Execution completeExecution(Execution execution) {
+
+        execution.setStatus(ExecutionStatus.SUCCEEDED);
+        execution.setCompletedAt(Instant.now());
+
+        return executionRepository.save(execution);
+    }
+
+    public Execution save(Execution execution) {
+        return executionRepository.save(execution);
+    }
+
+    public Execution createRetryExecution(
+            Execution failedExecution,
+            long delaySeconds
+    ) {
+
+        int nextAttemptNumber =
+                failedExecution.getAttemptNumber() + 1;
+
+        Execution retryExecution = new Execution(
+                failedExecution.getJob(),
+                ExecutionStatus.WAITING_FOR_RETRY,
+                nextAttemptNumber
+        );
+
+        retryExecution.setNextAttemptAt(
+                Instant.now().plusSeconds(delaySeconds)
+        );
+
+        return executionRepository.save(retryExecution);
+    }
 }

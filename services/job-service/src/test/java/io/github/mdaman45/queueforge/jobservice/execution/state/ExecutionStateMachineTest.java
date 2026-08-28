@@ -72,4 +72,59 @@ class ExecutionStateMachineTest {
                 )
         );
     }
+
+    @Test
+    void failedToWaitingForRetryShouldBeValid() {
+
+        assertTrue(
+                ExecutionStateMachine.isValidTransition(
+                        ExecutionStatus.FAILED,
+                        ExecutionStatus.WAITING_FOR_RETRY
+                )
+        );
+    }
+
+    @Test
+    void waitingForRetryToStartedShouldBeValid() {
+
+        assertTrue(
+                ExecutionStateMachine.isValidTransition(
+                        ExecutionStatus.WAITING_FOR_RETRY,
+                        ExecutionStatus.STARTED
+                )
+        );
+    }
+
+    @Test
+    void waitingForRetryToCancelledShouldBeValid() {
+
+        assertTrue(
+                ExecutionStateMachine.isValidTransition(
+                        ExecutionStatus.WAITING_FOR_RETRY,
+                        ExecutionStatus.CANCELLED
+                )
+        );
+    }
+
+    @Test
+    void failedToStartedShouldBeInvalid() {
+
+        assertFalse(
+                ExecutionStateMachine.isValidTransition(
+                        ExecutionStatus.FAILED,
+                        ExecutionStatus.STARTED
+                )
+        );
+    }
+
+    @Test
+    void waitingForRetryToRunningShouldBeInvalid() {
+
+        assertFalse(
+                ExecutionStateMachine.isValidTransition(
+                        ExecutionStatus.WAITING_FOR_RETRY,
+                        ExecutionStatus.RUNNING
+                )
+        );
+    }
 }
