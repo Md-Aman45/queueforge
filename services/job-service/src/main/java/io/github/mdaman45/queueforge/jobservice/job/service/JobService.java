@@ -12,7 +12,8 @@ import io.github.mdaman45.queueforge.jobservice.job.repository.JobRepository;
 import io.github.mdaman45.queueforge.jobservice.job.enums.JobStatus;
 import io.github.mdaman45.queueforge.jobservice.job.state.JobStateMachine;
 import io.github.mdaman45.queueforge.jobservice.exception.InvalidJobStateException;
-import io.github.mdaman45.queueforge.jobservice.execution.service.ExecutionService;
+// import io.github.mdaman45.queueforge.jobservice.execution.service.ExecutionService;
+import io.github.mdaman45.queueforge.jobservice.retry.entity.RetryPolicy;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.stereotype.Service;
@@ -36,10 +37,18 @@ public class JobService {
     @Transactional
     public ApiResponse<CreateJobResponse> createJob(CreateJobRequest request) {
 
+        RetryPolicy retryPolicy = new RetryPolicy(
+                1,
+                false,
+                0,
+                io.github.mdaman45.queueforge.jobservice.retry.enums.BackoffStrategy.FIXED
+        );
+
         Job job = new Job(
                 request.jobName(),
                 request.jobType(),
-                JobStatus.ACCEPTED
+                JobStatus.ACCEPTED,
+                retryPolicy
         );
 
         Job savedJob = jobRepository.save(job);
