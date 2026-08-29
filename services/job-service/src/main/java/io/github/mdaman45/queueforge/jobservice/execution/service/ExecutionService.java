@@ -17,171 +17,181 @@ import java.util.List;
 @Service
 public class ExecutionService {
 
-    private final ExecutionRepository executionRepository;
-    private final JobRepository jobRepository;
+        private final ExecutionRepository executionRepository;
+        private final JobRepository jobRepository;
 
-    public ExecutionService(
-            ExecutionRepository executionRepository,
-            JobRepository jobRepository
-    ) {
-        this.executionRepository = executionRepository;
-        this.jobRepository = jobRepository;
-    }
-
-
-    public Execution createInitialExecution(Job job) {
-
-        Execution execution = new Execution(
-                job,
-                ExecutionStatus.STARTED,
-                1
-        );
-
-        execution.setStartedAt(Instant.now());
-
-        return executionRepository.save(execution);
-    }
-
-
-    public Execution save(Execution execution) {
-        return executionRepository.save(execution);
-    }
-
-
-    public Execution createRetryExecution(
-            Execution failedExecution,
-            long delaySeconds
-    ) {
-
-        int nextAttemptNumber =
-                failedExecution.getAttemptNumber() + 1;
-
-        Execution retryExecution = new Execution(
-                failedExecution.getJob(),
-                ExecutionStatus.WAITING_FOR_RETRY,
-                nextAttemptNumber
-        );
-
-        retryExecution.setNextAttemptAt(
-                Instant.now().plusSeconds(delaySeconds)
-        );
-
-        return executionRepository.save(retryExecution);
-    }
-
-
-    public ExecutionResponse getExecutionById(
-            String executionId
-    ) {
-
-        Execution execution = executionRepository.findById(executionId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Execution not found with id: "
-                                        + executionId
-                        )
-                );
-
-        return new ExecutionResponse(
-                execution.getId(),
-                execution.getJob().getId(),
-                execution.getStatus().name(),
-                execution.getAttemptNumber()
-        );
-    }
-
-
-    public ExecutionResponse startExecution(
-            String executionId
-    ) {
-
-        Execution execution = executionRepository.findById(executionId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Execution not found with id: "
-                                        + executionId
-                        )
-                );
-
-        boolean validTransition =
-                ExecutionStateMachine.isValidTransition(
-                        execution.getStatus(),
-                        ExecutionStatus.RUNNING
-                );
-
-        if (!validTransition) {
-            throw new IllegalStateException(
-                    "Execution cannot transition from "
-                            + execution.getStatus()
-                            + " to "
-                            + ExecutionStatus.RUNNING
-            );
+        public ExecutionService(
+                        ExecutionRepository executionRepository,
+                        JobRepository jobRepository) {
+                this.executionRepository = executionRepository;
+                this.jobRepository = jobRepository;
         }
 
-        execution.setStatus(ExecutionStatus.RUNNING);
+        public Execution createInitialExecution(Job job) {
 
-        Execution updatedExecution =
-                executionRepository.save(execution);
+                Execution execution = new Execution(
+                                job,
+                                ExecutionStatus.STARTED,
+                                1);
 
-        return new ExecutionResponse(
-                updatedExecution.getId(),
-                updatedExecution.getJob().getId(),
-                updatedExecution.getStatus().name(),
-                updatedExecution.getAttemptNumber()
-        );
-    }
+                execution.setStartedAt(Instant.now());
 
-
-    public List<ExecutionResponse> getExecutionsByJobId(
-            String jobId
-    ) {
-
-        Job job = jobRepository.findById(jobId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Job not found with id: " + jobId
-                        )
-                );
-
-        return executionRepository.findByJob(job)
-                .stream()
-                .map(execution -> new ExecutionResponse(
-                        execution.getId(),
-                        execution.getJob().getId(),
-                        execution.getStatus().name(),
-                        execution.getAttemptNumber()
-                ))
-                .toList();
-    }
-
-
-    public Execution failExecution(String executionId) {
-
-        Execution execution = executionRepository.findById(executionId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Execution not found with id: " + executionId
-                        )
-                );
-
-        boolean validTransition =
-                ExecutionStateMachine.isValidTransition(
-                        execution.getStatus(),
-                        ExecutionStatus.FAILED
-                );
-
-        if (!validTransition) {
-            throw new IllegalStateException(
-                    "Execution cannot transition from "
-                            + execution.getStatus()
-                            + " to "
-                            + ExecutionStatus.FAILED
-            );
+                return executionRepository.save(execution);
         }
 
-        execution.setStatus(ExecutionStatus.FAILED);
-        execution.setCompletedAt(Instant.now());
+        public Execution save(Execution execution) {
+                return executionRepository.save(execution);
+        }
 
-        return executionRepository.save(execution);
-    }
+        public Execution createRetryExecution(
+                        Execution failedExecution,
+                        long delaySeconds) {
+
+                int nextAttemptNumber = failedExecution.getAttemptNumber() + 1;
+
+                Execution retryExecution = new Execution(
+                                failedExecution.getJob(),
+                                ExecutionStatus.WAITING_FOR_RETRY,
+                                nextAttemptNumber);
+
+                retryExecution.setNextAttemptAt(
+                                Instant.now().plusSeconds(delaySeconds));
+
+                return executionRepository.save(retryExecution);
+        }
+
+        public ExecutionResponse getExecutionById(
+                        String executionId) {
+
+                Execution execution = executionRepository.findById(executionId)
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "Execution not found with id: "
+                                                                + executionId));
+
+                return new ExecutionResponse(
+                                execution.getId(),
+                                execution.getJob().getId(),
+                                execution.getStatus().name(),
+                                execution.getAttemptNumber());
+        }
+
+        public ExecutionResponse startExecution(
+                        String executionId) {
+
+                Execution execution = executionRepository.findById(executionId)
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "Execution not found with id: "
+                                                                + executionId));
+
+                boolean validTransition = ExecutionStateMachine.isValidTransition(
+                                execution.getStatus(),
+                                ExecutionStatus.RUNNING);
+
+                if (!validTransition) {
+                        throw new IllegalStateException(
+                                        "Execution cannot transition from "
+                                                        + execution.getStatus()
+                                                        + " to "
+                                                        + ExecutionStatus.RUNNING);
+                }
+
+                execution.setStatus(ExecutionStatus.RUNNING);
+
+                Execution updatedExecution = executionRepository.save(execution);
+
+                return new ExecutionResponse(
+                                updatedExecution.getId(),
+                                updatedExecution.getJob().getId(),
+                                updatedExecution.getStatus().name(),
+                                updatedExecution.getAttemptNumber());
+        }
+
+        public List<ExecutionResponse> getExecutionsByJobId(
+                        String jobId) {
+
+                Job job = jobRepository.findById(jobId)
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "Job not found with id: " + jobId));
+
+                return executionRepository.findByJob(job)
+                                .stream()
+                                .map(execution -> new ExecutionResponse(
+                                                execution.getId(),
+                                                execution.getJob().getId(),
+                                                execution.getStatus().name(),
+                                                execution.getAttemptNumber()))
+                                .toList();
+        }
+
+        public ExecutionResponse completeExecution(String executionId) {
+
+                Execution execution = executionRepository.findById(executionId)
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "Execution not found with id: " + executionId));
+
+                boolean validTransition = ExecutionStateMachine.isValidTransition(
+                                execution.getStatus(),
+                                ExecutionStatus.SUCCEEDED);
+
+                if (!validTransition) {
+                        throw new IllegalStateException(
+                                        "Execution cannot transition from "
+                                                        + execution.getStatus()
+                                                        + " to "
+                                                        + ExecutionStatus.SUCCEEDED);
+                }
+
+                execution.setStatus(ExecutionStatus.SUCCEEDED);
+                execution.setCompletedAt(Instant.now());
+
+                Execution updatedExecution = executionRepository.save(execution);
+
+                return new ExecutionResponse(
+                                updatedExecution.getId(),
+                                updatedExecution.getJob().getId(),
+                                updatedExecution.getStatus().name(),
+                                updatedExecution.getAttemptNumber());
+        }
+
+        public Execution failExecution(String executionId) {
+
+                Execution execution = executionRepository.findById(executionId)
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "Execution not found with id: " + executionId));
+
+                boolean validTransition = ExecutionStateMachine.isValidTransition(
+                                execution.getStatus(),
+                                ExecutionStatus.FAILED);
+
+                if (!validTransition) {
+                        throw new IllegalStateException(
+                                        "Execution cannot transition from "
+                                                        + execution.getStatus()
+                                                        + " to "
+                                                        + ExecutionStatus.FAILED);
+                }
+
+                // Mark current execution as FAILED
+                execution.setStatus(ExecutionStatus.FAILED);
+                execution.setCompletedAt(Instant.now());
+
+                Execution failedExecution = executionRepository.save(execution);
+
+                // Get retry policy
+                var retryPolicy = failedExecution.getJob().getRetryPolicy();
+
+                // Check if retry is allowed
+                if (retryPolicy.isRetryable()
+                                && failedExecution.getAttemptNumber() < retryPolicy.getMaxAttempts()) {
+
+                        long delaySeconds = retryPolicy.getRetryDelaySeconds();
+
+                        // Create next attempt
+                        createRetryExecution(
+                                        failedExecution,
+                                        delaySeconds);
+                }
+
+                return failedExecution;
+        }
 }
