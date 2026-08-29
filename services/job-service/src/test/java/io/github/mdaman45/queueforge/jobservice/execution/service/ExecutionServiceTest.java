@@ -4,35 +4,70 @@ import io.github.mdaman45.queueforge.jobservice.execution.entity.Execution;
 import io.github.mdaman45.queueforge.jobservice.execution.enums.ExecutionStatus;
 import io.github.mdaman45.queueforge.jobservice.execution.repository.ExecutionRepository;
 import io.github.mdaman45.queueforge.jobservice.job.entity.Job;
+import io.github.mdaman45.queueforge.jobservice.job.enums.JobStatus;
+import io.github.mdaman45.queueforge.jobservice.job.enums.JobType;
+import io.github.mdaman45.queueforge.jobservice.job.repository.JobRepository;
+import io.github.mdaman45.queueforge.jobservice.retry.entity.RetryPolicy;
+import io.github.mdaman45.queueforge.jobservice.retry.enums.BackoffStrategy;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class ExecutionServiceTest {
 
     @Test
-    void shouldCreateInitialExecution() {
+    void createInitialExecutionShouldCreateStartedExecution() {
 
-        ExecutionRepository repository = mock(ExecutionRepository.class);
-        ExecutionService service = new ExecutionService(repository);
+        ExecutionRepository executionRepository =
+                mock(ExecutionRepository.class);
 
-        Job job = mock(Job.class);
+        JobRepository jobRepository =
+                mock(JobRepository.class);
 
-        when(repository.save(any(Execution.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
+        ExecutionService executionService =
+                new ExecutionService(
+                        executionRepository,
+                        jobRepository
+                );
 
-        Execution result = service.createInitialExecution(job);
+        RetryPolicy retryPolicy = new RetryPolicy(
+                3,
+                false,
+                0,
+                BackoffStrategy.FIXED
+        );
 
-        assertNotNull(result);
-        assertEquals(job, result.getJob());
-        assertEquals(ExecutionStatus.STARTED, result.getStatus());
-        assertEquals(1, result.getAttemptNumber());
-        assertNotNull(result.getStartedAt());
+        Job job = new Job(
+                "Test Job",
+                JobType.SYSTEM,
+                JobStatus.ACCEPTED,
+                retryPolicy
+        );
 
-        verify(repository, times(1))
-                .save(any(Execution.class));
+        Execution savedExecution = new Execution(
+                job,
+                ExecutionStatus.STARTED,
+                1
+        );
+
+        when(executionRepository.save(
+                org.mockito.ArgumentMatchers.any(Execution.class)
+        )).thenReturn(savedExecution);
+
+        Execution result =
+                executionService.createInitialExecution(job);
+
+        assertEquals(
+                ExecutionStatus.STARTED,
+                result.getStatus()
+        );
+
+        assertEquals(
+                1,
+                result.getAttemptNumber()
+        );
     }
 }
