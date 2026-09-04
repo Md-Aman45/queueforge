@@ -1,6 +1,7 @@
 package io.github.mdaman45.queueforge.jobservice.job.service;
 
 import io.github.mdaman45.queueforge.jobservice.common.response.ApiResponse;
+import io.github.mdaman45.queueforge.jobservice.exception.InvalidJobStateException;
 import io.github.mdaman45.queueforge.jobservice.exception.ResourceNotFoundException;
 import io.github.mdaman45.queueforge.jobservice.execution.service.ExecutionService;
 import io.github.mdaman45.queueforge.jobservice.job.dto.CreateJobRequest;
@@ -8,18 +9,16 @@ import io.github.mdaman45.queueforge.jobservice.job.dto.CreateJobResponse;
 import io.github.mdaman45.queueforge.jobservice.job.dto.JobResponse;
 import io.github.mdaman45.queueforge.jobservice.job.dto.UpdateJobStatusRequest;
 import io.github.mdaman45.queueforge.jobservice.job.entity.Job;
-import io.github.mdaman45.queueforge.jobservice.job.repository.JobRepository;
 import io.github.mdaman45.queueforge.jobservice.job.enums.JobStatus;
+import io.github.mdaman45.queueforge.jobservice.job.repository.JobRepository;
 import io.github.mdaman45.queueforge.jobservice.job.state.JobStateMachine;
-import io.github.mdaman45.queueforge.jobservice.exception.InvalidJobStateException;
 import io.github.mdaman45.queueforge.jobservice.retry.entity.RetryPolicy;
-import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
-
 
 @Service
 public class JobService {
@@ -27,20 +26,25 @@ public class JobService {
     private final JobRepository jobRepository;
     private final ExecutionService executionService;
 
-    public JobService(JobRepository jobRepository, ExecutionService executionService) {
+    public JobService(
+            JobRepository jobRepository,
+            ExecutionService executionService
+    ) {
         this.jobRepository = jobRepository;
         this.executionService = executionService;
     }
 
     // Creates Job...
     @Transactional
-    public ApiResponse<CreateJobResponse> createJob(CreateJobRequest request) {
+    public ApiResponse<CreateJobResponse> createJob(
+            CreateJobRequest request
+    ) {
 
         RetryPolicy retryPolicy = new RetryPolicy(
-                1,
-                false,
-                0,
-                io.github.mdaman45.queueforge.jobservice.retry.enums.BackoffStrategy.FIXED
+                request.maxAttempts(),
+                request.retryable(),
+                request.retryDelaySeconds(),
+                request.backoffStrategy()
         );
 
         Job job = new Job(
@@ -63,10 +67,10 @@ public class JobService {
                 );
 
         return new ApiResponse<>(
-            true,
-            "Job accepted successfully",
-            response,
-            Instant.now()
+                true,
+                "Job accepted successfully",
+                response,
+                Instant.now()
         );
     }
 
@@ -75,11 +79,11 @@ public class JobService {
     public JobResponse getJobById(String jobId) {
 
         Job job = jobRepository.findById(jobId)
-            .orElseThrow(() ->
-                    new ResourceNotFoundException(
-                            "Job not found with id: " + jobId
-                    )
-            );
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Job not found with id: " + jobId
+                        )
+                );
 
         return new JobResponse(
                 job.getId(),
@@ -88,8 +92,6 @@ public class JobService {
                 job.getStatus().name()
         );
     }
-
-
 
 
     // Get all jobs...
@@ -107,34 +109,32 @@ public class JobService {
     }
 
 
-
-
-
-    // Update Job Staus...
+    // Update Job Status...
     public JobResponse updateJobStatus(
-        String jobId,
-        UpdateJobStatusRequest request
+            String jobId,
+            UpdateJobStatusRequest request
     ) {
 
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Job not found with id: " + jobId
-                        ));
-
+                        )
+                );
 
         if (!JobStateMachine.isValidTransition(
                 job.getStatus(),
                 request.status()
         )) {
 
-                throw new InvalidJobStateException(
-                        "Invalid status transition from "
-                                + job.getStatus()
-                                + " to "
-                                + request.status()
-                );
+            throw new InvalidJobStateException(
+                    "Invalid status transition from "
+                            + job.getStatus()
+                            + " to "
+                            + request.status()
+            );
         }
+
         job.setStatus(request.status());
 
         Job updatedJob = jobRepository.save(job);
@@ -145,5 +145,5 @@ public class JobService {
                 updatedJob.getJobType().name(),
                 updatedJob.getStatus().name()
         );
-    } 
+    }
 }
