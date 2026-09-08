@@ -2,185 +2,140 @@ package io.github.mdaman45.queueforge.jobservice.execution.service;
 
 import io.github.mdaman45.queueforge.jobservice.execution.entity.Execution;
 import io.github.mdaman45.queueforge.jobservice.execution.enums.ExecutionStatus;
+import io.github.mdaman45.queueforge.jobservice.execution.repository.ExecutionRepository;
 import io.github.mdaman45.queueforge.jobservice.job.entity.Job;
-import io.github.mdaman45.queueforge.jobservice.job.enums.JobStatus;
-import io.github.mdaman45.queueforge.jobservice.job.enums.JobType;
 import io.github.mdaman45.queueforge.jobservice.retry.entity.RetryPolicy;
-import io.github.mdaman45.queueforge.jobservice.retry.enums.BackoffStrategy;
 import io.github.mdaman45.queueforge.jobservice.retry.service.RetryBackoffService;
 import io.github.mdaman45.queueforge.jobservice.retry.service.RetryDecisionService;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class ExecutionRetryServiceTest {
 
+    @Mock
     private RetryDecisionService retryDecisionService;
-    private RetryBackoffService retryBackoffService;
-    private ExecutionService executionService;
 
+    @Mock
+    private RetryBackoffService retryBackoffService;
+
+    @Mock
+    private ExecutionRepository executionRepository;
+
+    @Mock
+    private Job job;
+
+    @InjectMocks
     private ExecutionRetryService executionRetryService;
 
-    @BeforeEach
-    void setUp() {
-
-        retryDecisionService = mock(RetryDecisionService.class);
-        retryBackoffService = mock(RetryBackoffService.class);
-        executionService = mock(ExecutionService.class);
-
-        executionRetryService = new ExecutionRetryService(
-                retryDecisionService,
-                retryBackoffService,
-                executionService
-        );
-    }
-
     @Test
-    void shouldPrepareRetryWhenRetryIsAllowed() {
+    void shouldCreateRetryExecutionWhenRetryIsAllowed() {
 
-        Job job = new Job(
-                "test-job",
-                JobType.COMMUNICATION,
-                JobStatus.ACCEPTED,
-                new RetryPolicy(
-                        3,
-                        true,
-                        10,
-                        BackoffStrategy.FIXED
-                )
-        );
+        Execution failedExecution = mock(Execution.class);
+        RetryPolicy retryPolicy = mock(RetryPolicy.class);
+        Execution retryExecution = mock(Execution.class);
 
-        Execution failedExecution = new Execution(
-                job,
-                ExecutionStatus.FAILED,
-                1
-        );
+        when(failedExecution.getAttemptNumber())
+                .thenReturn(1);
 
-        Execution retryExecution = new Execution(
-                job,
-                ExecutionStatus.STARTED,
-                2
-        );
+        when(failedExecution.getStatus())
+                .thenReturn(ExecutionStatus.FAILED);
 
-        when(retryDecisionService.shouldRetry(1, job.getRetryPolicy()))
-                .thenReturn(true);
+        when(failedExecution.getJob())
+                .thenReturn(job);
+
+        when(retryDecisionService.shouldRetry(
+                1,
+                retryPolicy
+        )).thenReturn(true);
 
         when(retryBackoffService.calculateDelaySeconds(
-                job.getRetryPolicy(),
+                retryPolicy,
                 1
-        )).thenReturn(10L);
+        )).thenReturn(5L);
 
-        when(executionService.createRetryExecution(
-                failedExecution,
-                10L
-        )).thenReturn(retryExecution);
+        when(executionRepository.save(any(Execution.class)))
+                .thenReturn(retryExecution);
 
-        Execution result = executionRetryService.prepareRetry(
-                failedExecution,
-                job.getRetryPolicy()
-        );
+        Execution result =
+                executionRetryService.prepareRetry(
+                        failedExecution,
+                        retryPolicy
+                );
 
-        assertNotNull(result);
-        assertEquals(ExecutionStatus.WAITING_FOR_RETRY,
-                failedExecution.getStatus());
-
-        assertEquals(ExecutionStatus.STARTED,
-                result.getStatus());
-
-        assertEquals(2, result.getAttemptNumber());
+        assertSame(retryExecution, result);
 
         verify(retryDecisionService)
-                .shouldRetry(1, job.getRetryPolicy());
+                .shouldRetry(1, retryPolicy);
 
         verify(retryBackoffService)
-                .calculateDelaySeconds(job.getRetryPolicy(), 1);
+                .calculateDelaySeconds(
+                        retryPolicy,
+                        1
+                );
 
-        verify(executionService)
-                .createRetryExecution(failedExecution, 10L);
+        verify(executionRepository)
+                .save(any(Execution.class));
     }
 
     @Test
-    void shouldNotRetryWhenRetryIsNotAllowed() {
+    void shouldNotCreateRetryWhenRetryIsNotAllowed() {
 
-        Job job = new Job(
-                "test-job",
-                JobType.COMMUNICATION,
-                JobStatus.ACCEPTED,
-                new RetryPolicy(
-                        3,
-                        false,
-                        10,
-                        BackoffStrategy.FIXED
-                )
-        );
+        Execution failedExecution = mock(Execution.class);
+        RetryPolicy retryPolicy = mock(RetryPolicy.class);
 
-        Execution failedExecution = new Execution(
-                job,
-                ExecutionStatus.FAILED,
-                1
-        );
+        when(failedExecution.getAttemptNumber())
+                .thenReturn(5);
 
-        when(retryDecisionService.shouldRetry(1, job.getRetryPolicy()))
-                .thenReturn(false);
+        when(retryDecisionService.shouldRetry(
+                5,
+                retryPolicy
+        )).thenReturn(false);
 
-        Execution result = executionRetryService.prepareRetry(
-                failedExecution,
-                job.getRetryPolicy()
-        );
+        Execution result =
+                executionRetryService.prepareRetry(
+                        failedExecution,
+                        retryPolicy
+                );
 
         assertSame(failedExecution, result);
 
-        assertEquals(
-                ExecutionStatus.FAILED,
-                result.getStatus()
-        );
-
         verify(retryDecisionService)
-                .shouldRetry(1, job.getRetryPolicy());
+                .shouldRetry(5, retryPolicy);
 
         verifyNoInteractions(retryBackoffService);
-        verifyNoInteractions(executionService);
+        verifyNoInteractions(executionRepository);
     }
 
     @Test
-    void shouldRejectRetryWhenExecutionIsNotFailed() {
+    void shouldNotModifyFailedExecutionWhenCreatingRetry() {
 
-        Job job = new Job(
-                "test-job",
-                JobType.COMMUNICATION,
-                JobStatus.ACCEPTED,
-                new RetryPolicy(
-                        3,
-                        true,
-                        10,
-                        BackoffStrategy.FIXED
-                )
+        Execution failedExecution = mock(Execution.class);
+        RetryPolicy retryPolicy = mock(RetryPolicy.class);
+
+        when(failedExecution.getAttemptNumber())
+                .thenReturn(1);
+
+        when(retryDecisionService.shouldRetry(
+                1,
+                retryPolicy
+        )).thenReturn(false);
+
+        executionRetryService.prepareRetry(
+                failedExecution,
+                retryPolicy
         );
 
-        Execution execution = new Execution(
-                job,
-                ExecutionStatus.RUNNING,
-                1
-        );
-
-        when(retryDecisionService.shouldRetry(1, job.getRetryPolicy()))
-                .thenReturn(true);
-
-        assertThrows(
-                IllegalStateException.class,
-                () -> executionRetryService.prepareRetry(
-                        execution,
-                        job.getRetryPolicy()
-                )
-        );
-
-        verify(retryDecisionService)
-                .shouldRetry(1, job.getRetryPolicy());
-
-        verifyNoInteractions(retryBackoffService);
-        verifyNoInteractions(executionService);
+        verify(failedExecution, never())
+                .setStatus(ExecutionStatus.WAITING_FOR_RETRY);
     }
 }

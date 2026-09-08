@@ -2,6 +2,7 @@ package io.github.mdaman45.queueforge.jobservice.execution.service;
 
 import io.github.mdaman45.queueforge.jobservice.execution.entity.Execution;
 import io.github.mdaman45.queueforge.jobservice.execution.enums.ExecutionStatus;
+import io.github.mdaman45.queueforge.jobservice.execution.repository.ExecutionRepository;
 import io.github.mdaman45.queueforge.jobservice.execution.state.ExecutionStateMachine;
 import io.github.mdaman45.queueforge.jobservice.retry.entity.RetryPolicy;
 import io.github.mdaman45.queueforge.jobservice.retry.service.RetryBackoffService;
@@ -14,16 +15,16 @@ public class ExecutionRetryService {
 
     private final RetryDecisionService retryDecisionService;
     private final RetryBackoffService retryBackoffService;
-    private final ExecutionService executionService;
+    private final ExecutionRepository executionRepository;
 
     public ExecutionRetryService(
             RetryDecisionService retryDecisionService,
             RetryBackoffService retryBackoffService,
-            ExecutionService executionService
+            ExecutionRepository executionRepository
     ) {
         this.retryDecisionService = retryDecisionService;
         this.retryBackoffService = retryBackoffService;
-        this.executionService = executionService;
+        this.executionRepository = executionRepository;
     }
 
     public Execution prepareRetry(
@@ -56,16 +57,36 @@ public class ExecutionRetryService {
             );
         }
 
-        failedExecution.setStatus(ExecutionStatus.WAITING_FOR_RETRY);
+        long delaySeconds =
+                retryBackoffService.calculateDelaySeconds(
+                        retryPolicy,
+                        currentAttempt
+                );
 
-        long delaySeconds = retryBackoffService.calculateDelaySeconds(
-                retryPolicy,
-                currentAttempt
-        );
-
-        return executionService.createRetryExecution(
+        return createRetryExecution(
                 failedExecution,
                 delaySeconds
         );
+    }
+
+    private Execution createRetryExecution(
+            Execution failedExecution,
+            long delaySeconds
+    ) {
+
+        int nextAttemptNumber =
+                failedExecution.getAttemptNumber() + 1;
+
+        Execution retryExecution = new Execution(
+                failedExecution.getJob(),
+                ExecutionStatus.WAITING_FOR_RETRY,
+                nextAttemptNumber
+        );
+
+        retryExecution.setNextAttemptAt(
+                java.time.Instant.now().plusSeconds(delaySeconds)
+        );
+
+        return executionRepository.save(retryExecution);
     }
 }
