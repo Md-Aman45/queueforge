@@ -1,0 +1,10 @@
+services:
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: queueforge-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: queueforge
+      RABBITMQ_DEFAULT_PASS: queueforge
