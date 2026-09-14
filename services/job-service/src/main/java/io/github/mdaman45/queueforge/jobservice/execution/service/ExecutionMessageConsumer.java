@@ -9,19 +9,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExecutionMessageConsumer {
 
-    private final ExecutionService executionService;
+    private final ExecutionOrchestrator executionOrchestrator;
 
     public ExecutionMessageConsumer(
-            ExecutionService executionService
+            ExecutionOrchestrator executionOrchestrator
     ) {
-        this.executionService = executionService;
+        this.executionOrchestrator = executionOrchestrator;
     }
 
     @RabbitListener(queues = RabbitMQConfig.EXECUTION_QUEUE)
     public void consume(JobExecutionMessage message) {
-
-        executionService.startExecution(
-                message.executionId()
-        );
+        executionOrchestrator.execute(message);
     }
 }

@@ -10,13 +10,15 @@ import static org.mockito.Mockito.verify;
 class ExecutionMessageConsumerTest {
 
     @Test
-    void shouldConsumeExecutionMessage() {
+    void shouldDelegateMessageToExecutionOrchestrator() {
 
-        ExecutionService executionService =
-                mock(ExecutionService.class);
+        ExecutionOrchestrator executionOrchestrator =
+                mock(ExecutionOrchestrator.class);
 
         ExecutionMessageConsumer consumer =
-                new ExecutionMessageConsumer(executionService);
+                new ExecutionMessageConsumer(
+                        executionOrchestrator
+                );
 
         JobExecutionMessage message =
                 new JobExecutionMessage(
@@ -28,7 +30,7 @@ class ExecutionMessageConsumerTest {
 
         consumer.consume(message);
 
-        verify(executionService)
-                .startExecution("test-execution-123");
+        verify(executionOrchestrator)
+                .execute(message);
     }
 }
