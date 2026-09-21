@@ -9,6 +9,8 @@ import io.github.mdaman45.queueforge.jobservice.exception.ResourceNotFoundExcept
 import io.github.mdaman45.queueforge.jobservice.job.entity.Job;
 import io.github.mdaman45.queueforge.jobservice.job.repository.JobRepository;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -171,6 +173,7 @@ public class ExecutionService {
         );
     }
 
+    @Transactional
     public Execution failExecution(
             String executionId
     ) {

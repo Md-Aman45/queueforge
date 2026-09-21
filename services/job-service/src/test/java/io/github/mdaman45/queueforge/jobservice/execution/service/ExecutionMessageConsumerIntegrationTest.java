@@ -37,29 +37,33 @@ class ExecutionMessageConsumerIntegrationTest {
     private ExecutionRepository executionRepository;
 
     @Test
-    void shouldStartExecutionWhenMessageIsConsumed() {
+    void shouldExecuteJobWhenMessageIsConsumed() {
 
-        RetryPolicy retryPolicy = new RetryPolicy(
-                3,
-                true,
-                5,
-                BackoffStrategy.FIXED
-        );
+        RetryPolicy retryPolicy =
+                new RetryPolicy(
+                        3,
+                        true,
+                        5,
+                        BackoffStrategy.FIXED
+                );
 
-        Job job = new Job(
-                "Consumer Integration Test",
-                JobType.COMMUNICATION,
-                JobStatus.ACCEPTED,
-                retryPolicy
-        );
+        Job job =
+                new Job(
+                        "Consumer Integration Test",
+                        JobType.COMMUNICATION,
+                        JobStatus.ACCEPTED,
+                        retryPolicy
+                );
 
-        Job savedJob = jobRepository.save(job);
+        Job savedJob =
+                jobRepository.save(job);
 
-        Execution execution = new Execution(
-                savedJob,
-                ExecutionStatus.STARTED,
-                1
-        );
+        Execution execution =
+                new Execution(
+                        savedJob,
+                        ExecutionStatus.STARTED,
+                        1
+                );
 
         execution.setStartedAt(Instant.now());
 
@@ -86,6 +90,7 @@ class ExecutionMessageConsumerIntegrationTest {
         Execution updatedExecution;
 
         do {
+
             updatedExecution =
                     executionRepository
                             .findById(savedExecution.getId())
@@ -93,18 +98,22 @@ class ExecutionMessageConsumerIntegrationTest {
 
             if (updatedExecution != null
                     && updatedExecution.getStatus()
-                    == ExecutionStatus.RUNNING) {
+                    == ExecutionStatus.SUCCEEDED) {
+
                 break;
             }
 
             try {
+
                 Thread.sleep(100);
-            } catch (InterruptedException e) {
+
+            } catch (InterruptedException exception) {
+
                 Thread.currentThread().interrupt();
 
                 throw new IllegalStateException(
                         "Test interrupted while waiting for execution",
-                        e
+                        exception
                 );
             }
 
@@ -113,7 +122,7 @@ class ExecutionMessageConsumerIntegrationTest {
         assertNotNull(updatedExecution);
 
         assertEquals(
-                ExecutionStatus.RUNNING,
+                ExecutionStatus.SUCCEEDED,
                 updatedExecution.getStatus()
         );
     }

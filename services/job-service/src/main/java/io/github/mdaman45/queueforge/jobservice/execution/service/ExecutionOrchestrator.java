@@ -7,19 +7,40 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExecutionOrchestrator {
 
+    private final ExecutionService executionService;
     private final JobExecutorRegistry jobExecutorRegistry;
 
     public ExecutionOrchestrator(
+            ExecutionService executionService,
             JobExecutorRegistry jobExecutorRegistry
     ) {
+        this.executionService = executionService;
         this.jobExecutorRegistry = jobExecutorRegistry;
     }
 
     public void execute(JobExecutionMessage message) {
 
+        executionService.startExecution(
+                message.executionId()
+        );
+
         JobExecutor executor =
                 jobExecutorRegistry.getExecutor(message);
 
-        executor.execute(message);
+        try {
+            executor.execute(message);
+
+            executionService.completeExecution(
+                    message.executionId()
+            );
+
+        } catch (Exception exception) {
+
+            executionService.failExecution(
+                    message.executionId()
+            );
+
+            throw exception;
+        }
     }
 }
