@@ -14,11 +14,14 @@ import java.util.List;
 public class RetryProcessor {
 
     private final ExecutionRepository executionRepository;
+    private final ExecutionDispatcher executionDispatcher;
 
     public RetryProcessor(
-            ExecutionRepository executionRepository
+            ExecutionRepository executionRepository,
+            ExecutionDispatcher executionDispatcher
     ) {
         this.executionRepository = executionRepository;
+        this.executionDispatcher = executionDispatcher;
     }
 
     @Transactional
@@ -39,7 +42,10 @@ public class RetryProcessor {
             execution.setStartedAt(now);
             execution.setNextAttemptAt(null);
 
-            executionRepository.save(execution);
+            Execution savedExecution =
+                    executionRepository.save(execution);
+
+            executionDispatcher.dispatch(savedExecution);
         }
     }
 }

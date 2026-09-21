@@ -23,6 +23,9 @@ class RetryProcessorTest {
     @Mock
     private ExecutionRepository executionRepository;
 
+    @Mock
+    private ExecutionDispatcher executionDispatcher;
+
     @InjectMocks
     private RetryProcessor retryProcessor;
 
@@ -38,6 +41,9 @@ class RetryProcessorTest {
                 ))
                 .thenReturn(List.of(execution));
 
+        when(executionRepository.save(execution))
+                .thenReturn(execution);
+
         retryProcessor.processDueRetries();
 
         verify(execution)
@@ -51,6 +57,9 @@ class RetryProcessorTest {
 
         verify(executionRepository)
                 .save(execution);
+
+        verify(executionDispatcher)
+                .dispatch(execution);
     }
 
     @Test
@@ -67,5 +76,8 @@ class RetryProcessorTest {
 
         verify(executionRepository, never())
                 .save(any(Execution.class));
+
+        verify(executionDispatcher, never())
+                .dispatch(any(Execution.class));
     }
 }

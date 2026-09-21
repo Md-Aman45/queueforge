@@ -9,9 +9,8 @@ import io.github.mdaman45.queueforge.jobservice.exception.ResourceNotFoundExcept
 import io.github.mdaman45.queueforge.jobservice.job.entity.Job;
 import io.github.mdaman45.queueforge.jobservice.job.repository.JobRepository;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
@@ -22,15 +21,18 @@ public class ExecutionService {
     private final ExecutionRepository executionRepository;
     private final JobRepository jobRepository;
     private final ExecutionRetryService executionRetryService;
+    private final ExecutionDispatcher executionDispatcher;
 
     public ExecutionService(
             ExecutionRepository executionRepository,
             JobRepository jobRepository,
-            ExecutionRetryService executionRetryService
+            ExecutionRetryService executionRetryService,
+            ExecutionDispatcher executionDispatcher
     ) {
         this.executionRepository = executionRepository;
         this.jobRepository = jobRepository;
         this.executionRetryService = executionRetryService;
+        this.executionDispatcher = executionDispatcher;
     }
 
     public Execution createInitialExecution(Job job) {
@@ -43,7 +45,12 @@ public class ExecutionService {
 
         execution.setStartedAt(Instant.now());
 
-        return executionRepository.save(execution);
+        Execution savedExecution =
+                executionRepository.save(execution);
+
+        executionDispatcher.dispatch(savedExecution);
+
+        return savedExecution;
     }
 
     public Execution save(Execution execution) {
@@ -54,33 +61,31 @@ public class ExecutionService {
             String executionId
     ) {
 
-        Execution execution = executionRepository.findById(executionId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Execution not found with id: "
-                                        + executionId
+        Execution execution =
+                executionRepository.findById(executionId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Execution not found with id: "
+                                                + executionId
                         )
-                );
+                        );
 
-        return new ExecutionResponse(
-                execution.getId(),
-                execution.getJob().getId(),
-                execution.getStatus().name(),
-                execution.getAttemptNumber()
-        );
+        return mapToResponse(execution);
     }
 
+    @Transactional
     public ExecutionResponse startExecution(
             String executionId
     ) {
 
-        Execution execution = executionRepository.findById(executionId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Execution not found with id: "
-                                        + executionId
-                        )
-                );
+        Execution execution =
+                executionRepository.findById(executionId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Execution not found with id: "
+                                                + executionId
+                                )
+                        );
 
         boolean validTransition =
                 ExecutionStateMachine.isValidTransition(
@@ -99,50 +104,44 @@ public class ExecutionService {
 
         execution.setStatus(ExecutionStatus.RUNNING);
 
-        Execution updatedExecution =
+        Execution savedExecution =
                 executionRepository.save(execution);
 
-        return new ExecutionResponse(
-                updatedExecution.getId(),
-                updatedExecution.getJob().getId(),
-                updatedExecution.getStatus().name(),
-                updatedExecution.getAttemptNumber()
-        );
+        return mapToResponse(savedExecution);
     }
 
     public List<ExecutionResponse> getExecutionsByJobId(
             String jobId
     ) {
 
-        Job job = jobRepository.findById(jobId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Job not found with id: " + jobId
-                        )
-                );
+        Job job =
+                jobRepository.findById(jobId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Job not found with id: "
+                                                + jobId
+                                )
+                        );
 
         return executionRepository.findByJob(job)
                 .stream()
-                .map(execution -> new ExecutionResponse(
-                        execution.getId(),
-                        execution.getJob().getId(),
-                        execution.getStatus().name(),
-                        execution.getAttemptNumber()
-                ))
+                .map(this::mapToResponse)
                 .toList();
     }
 
+    @Transactional
     public ExecutionResponse completeExecution(
             String executionId
     ) {
 
-        Execution execution = executionRepository.findById(executionId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Execution not found with id: "
-                                        + executionId
-                        )
-                );
+        Execution execution =
+                executionRepository.findById(executionId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Execution not found with id: "
+                                                + executionId
+                                )
+                        );
 
         boolean validTransition =
                 ExecutionStateMachine.isValidTransition(
@@ -162,15 +161,10 @@ public class ExecutionService {
         execution.setStatus(ExecutionStatus.SUCCEEDED);
         execution.setCompletedAt(Instant.now());
 
-        Execution updatedExecution =
+        Execution savedExecution =
                 executionRepository.save(execution);
 
-        return new ExecutionResponse(
-                updatedExecution.getId(),
-                updatedExecution.getJob().getId(),
-                updatedExecution.getStatus().name(),
-                updatedExecution.getAttemptNumber()
-        );
+        return mapToResponse(savedExecution);
     }
 
     @Transactional
@@ -178,13 +172,14 @@ public class ExecutionService {
             String executionId
     ) {
 
-        Execution execution = executionRepository.findById(executionId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Execution not found with id: "
-                                        + executionId
-                        )
-                );
+        Execution execution =
+                executionRepository.findById(executionId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Execution not found with id: "
+                                                + executionId
+                                )
+                        );
 
         boolean validTransition =
                 ExecutionStateMachine.isValidTransition(
@@ -201,20 +196,29 @@ public class ExecutionService {
             );
         }
 
-        // Mark current execution as FAILED
         execution.setStatus(ExecutionStatus.FAILED);
         execution.setCompletedAt(Instant.now());
 
         Execution failedExecution =
                 executionRepository.save(execution);
 
-        // Let the retry service decide whether another attempt
-        // should be created.
         executionRetryService.prepareRetry(
                 failedExecution,
                 failedExecution.getJob().getRetryPolicy()
         );
 
         return failedExecution;
+    }
+
+    private ExecutionResponse mapToResponse(
+            Execution execution
+    ) {
+
+        return new ExecutionResponse(
+                execution.getId(),
+                execution.getJob().getId(),
+                execution.getStatus().name(),
+                execution.getAttemptNumber()
+        );
     }
 }
