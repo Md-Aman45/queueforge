@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: job-service
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: queueforge
+    password: queueforge
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

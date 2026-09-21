@@ -1,4 +1,4 @@
-# QueueFlow - Database Design
+# QueueForge - Database Design
 
 ## Version
 
@@ -8,7 +8,7 @@
 
 # 1. Purpose
 
-This document defines the relational database design for QueueFlow.
+This document defines the relational database design for QueueForge.
 
 It specifies:
 
@@ -26,7 +26,7 @@ The database is designed for PostgreSQL and follows normalization principles whi
 
 # 2. Database Overview
 
-QueueFlow uses a **single PostgreSQL database** in Version 1.
+QueueForge uses a **single PostgreSQL database** in Version 1.
 
 Reason:
 
@@ -42,7 +42,7 @@ Future versions may split databases by service if required.
 # 3. Database Schema
 
 ```text
-queueflow_db
+QueueForge_db
 
 ├── jobs
 ├── job_history
@@ -71,7 +71,7 @@ workers
 
 ## Purpose
 
-Stores every job submitted to QueueFlow.
+Stores every job submitted to QueueForge.
 
 ---
 
@@ -278,7 +278,7 @@ AI
 
 Different job types require different fields.
 
-Instead of creating separate tables for every job type, QueueFlow stores the payload in a JSONB column.
+Instead of creating separate tables for every job type, QueueForge stores the payload in a JSONB column.
 
 Example:
 
@@ -414,6 +414,6 @@ Redis is responsible for temporary operational data, while PostgreSQL stores bus
 
 # Summary
 
-The QueueFlow database is designed to provide a reliable, maintainable, and scalable foundation for asynchronous job processing.
+The QueueForge database is designed to provide a reliable, maintainable, and scalable foundation for asynchronous job processing.
 
 It balances relational integrity with flexibility by using normalized tables for core entities and JSONB for job-specific payloads, enabling new job types to be introduced without frequent schema changes.

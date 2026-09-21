@@ -1,4 +1,4 @@
-# QueueFlow - Deployment Architecture
+# QueueForge - Deployment Architecture
 
 ## Version
 
@@ -8,9 +8,9 @@
 
 # 1. Purpose
 
-This document defines the deployment architecture of QueueFlow.
+This document defines the deployment architecture of QueueForge.
 
-It explains how QueueFlow services are packaged, configured, deployed, and managed across development and production environments.
+It explains how QueueForge services are packaged, configured, deployed, and managed across development and production environments.
 
 The deployment architecture emphasizes portability, reproducibility, scalability, and maintainability.
 
@@ -18,7 +18,7 @@ The deployment architecture emphasizes portability, reproducibility, scalability
 
 # 2. Deployment Overview
 
-QueueFlow follows a **containerized deployment architecture**.
+QueueForge follows a **containerized deployment architecture**.
 
 Each microservice runs independently inside its own Docker container while sharing a common Docker network.
 
@@ -80,31 +80,31 @@ Each component runs inside its own Docker container.
 Example:
 
 ```text
-queueflow-job-service
+QueueForge-job-service
 
-queueflow-rabbitmq
+QueueForge-rabbitmq
 
-queueflow-postgres
+QueueForge-postgres
 
-queueflow-redis
+QueueForge-redis
 
-queueflow-communication-worker
+QueueForge-communication-worker
 
-queueflow-document-worker
+QueueForge-document-worker
 
-queueflow-media-worker
+QueueForge-media-worker
 
-queueflow-cloud-worker
+QueueForge-cloud-worker
 
-queueflow-ai-worker
+QueueForge-ai-worker
 
-queueflow-ai-service
+QueueForge-ai-service
 
-queueflow-ml-service
+QueueForge-ml-service
 
-queueflow-prometheus
+QueueForge-prometheus
 
-queueflow-grafana
+QueueForge-grafana
 ```
 
 Containers are isolated and communicate over a shared Docker network.
@@ -118,7 +118,7 @@ All services are connected using a dedicated Docker bridge network.
 Example:
 
 ```text
-queueflow-network
+QueueForge-network
 ```
 
 Benefits:
@@ -283,7 +283,7 @@ Every successful build produces deployable container images.
 
 # 13. Deployment Environments
 
-QueueFlow supports multiple environments.
+QueueForge supports multiple environments.
 
 | Environment | Purpose                   |
 | ----------- | ------------------------- |
@@ -327,7 +327,7 @@ Redis runtime data is not considered critical because it can be rebuilt after re
 
 # 16. Scaling Strategy
 
-QueueFlow supports independent service scaling.
+QueueForge supports independent service scaling.
 
 Examples:
 
@@ -392,7 +392,7 @@ These features are intentionally excluded from Version 1.
 
 # 19. Design Principles
 
-QueueFlow follows these deployment principles:
+QueueForge follows these deployment principles:
 
 * Container First
 * Infrastructure as Code
@@ -421,6 +421,6 @@ The following deployment decisions were made:
 
 # Summary
 
-QueueFlow adopts a container-first deployment architecture using Docker and Docker Compose to ensure consistent, repeatable, and portable deployments.
+QueueForge adopts a container-first deployment architecture using Docker and Docker Compose to ensure consistent, repeatable, and portable deployments.
 
 Each service is independently packaged and deployed while sharing a common infrastructure layer. This approach simplifies development, testing, and production deployment, and provides a clear migration path toward Kubernetes and cloud-native environments in future releases.

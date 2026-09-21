@@ -1,4 +1,4 @@
-# QueueFlow - Security Architecture
+# QueueForge - Security Architecture
 
 ## Version
 
@@ -8,7 +8,7 @@
 
 # 1. Purpose
 
-This document defines the security architecture of QueueFlow.
+This document defines the security architecture of QueueForge.
 
 It describes how the platform protects users, services, data, infrastructure, and communication against unauthorized access, malicious requests, and accidental data exposure.
 
@@ -18,7 +18,7 @@ Security is implemented as a cross-cutting concern throughout the entire platfor
 
 # 2. Security Overview
 
-QueueFlow follows a **Defense in Depth** strategy.
+QueueForge follows a **Defense in Depth** strategy.
 
 Security is applied at multiple layers including:
 
@@ -66,7 +66,7 @@ Each layer performs its own security validation.
 
 # 4. Authentication
 
-QueueFlow authenticates users using **JSON Web Tokens (JWT)**.
+QueueForge authenticates users using **JSON Web Tokens (JWT)**.
 
 Authentication Flow:
 
@@ -227,7 +227,7 @@ Future deployments may use dedicated secret management solutions.
 
 # 13. Communication Security
 
-All communication between external clients and QueueFlow should use HTTPS.
+All communication between external clients and QueueForge should use HTTPS.
 
 Internal service communication should occur over trusted networks.
 
@@ -240,7 +240,7 @@ Future versions may support:
 
 # 14. Rate Limiting
 
-To protect APIs from abuse, QueueFlow supports rate limiting.
+To protect APIs from abuse, QueueForge supports rate limiting.
 
 Redis is used to track request counts.
 
@@ -264,8 +264,8 @@ Only trusted origins may access the platform.
 
 Example:
 
-* https://admin.queueflow.com
-* https://dashboard.queueflow.com
+* https://admin.QueueForge.com
+* https://dashboard.QueueForge.com
 
 Wildcard origins should be avoided in production.
 
@@ -345,7 +345,7 @@ These features are intentionally excluded from Version 1.
 
 # 20. Design Principles
 
-QueueFlow follows these security principles:
+QueueForge follows these security principles:
 
 * Defense in Depth
 * Least Privilege
@@ -375,6 +375,6 @@ The following security decisions were made:
 
 # Summary
 
-QueueFlow applies security at every layer of the platform through authentication, authorization, secure communication, input validation, infrastructure protection, and operational auditing.
+QueueForge applies security at every layer of the platform through authentication, authorization, secure communication, input validation, infrastructure protection, and operational auditing.
 
-By following modern security principles such as Defense in Depth, Least Privilege, and Secure by Default, QueueFlow provides a strong security foundation while remaining scalable, maintainable, and ready for future enterprise enhancements.
+By following modern security principles such as Defense in Depth, Least Privilege, and Secure by Default, QueueForge provides a strong security foundation while remaining scalable, maintainable, and ready for future enterprise enhancements.

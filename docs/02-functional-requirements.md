@@ -1,4 +1,4 @@
-# QueueFlow - Functional Requirements
+# QueueForge - Functional Requirements
 
 ## Version
 
@@ -8,7 +8,7 @@
 
 # 1. Purpose
 
-This document defines the functional requirements of QueueFlow.
+This document defines the functional requirements of QueueForge.
 
 Functional requirements describe **what the system must do** to meet user and business needs. They serve as the foundation for system design, development, testing, and future enhancements.
 
@@ -16,7 +16,7 @@ Functional requirements describe **what the system must do** to meet user and bu
 
 # 2. Overview
 
-QueueFlow is an AI-powered distributed task processing platform that enables applications to execute long-running tasks asynchronously.
+QueueForge is an AI-powered distributed task processing platform that enables applications to execute long-running tasks asynchronously.
 
 The platform provides reliable job processing, worker management, intelligent routing, monitoring, AI-assisted operations, and Machine Learning-based optimization.
 
@@ -409,4 +409,4 @@ This numbering enables traceability across design documents, implementation, tes
 
 # Summary
 
-This document defines the complete functional behavior of QueueFlow Version 1.0 and establishes the baseline for architecture, implementation, testing, and future platform evolution.
+This document defines the complete functional behavior of QueueForge Version 1.0 and establishes the baseline for architecture, implementation, testing, and future platform evolution.

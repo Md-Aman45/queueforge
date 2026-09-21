@@ -1,4 +1,4 @@
-# QueueFlow - Non-Functional Requirements
+# QueueForge - Non-Functional Requirements
 
 ## Version
 
@@ -8,11 +8,11 @@
 
 # 1. Purpose
 
-This document defines the non-functional requirements of QueueFlow.
+This document defines the non-functional requirements of QueueForge.
 
 Unlike functional requirements, which describe **what the system does**, non-functional requirements define **how well the system performs**, including its reliability, scalability, performance, security, and maintainability.
 
-These requirements ensure QueueFlow is production-ready and capable of supporting enterprise workloads.
+These requirements ensure QueueForge is production-ready and capable of supporting enterprise workloads.
 
 ---
 
@@ -361,7 +361,7 @@ Priority: **P1**
 
 # 13. Design Principles
 
-QueueFlow follows these engineering principles:
+QueueForge follows these engineering principles:
 
 * Single Responsibility Principle
 * Separation of Concerns
@@ -423,6 +423,6 @@ Examples:
 
 # Summary
 
-These non-functional requirements define the quality attributes of QueueFlow.
+These non-functional requirements define the quality attributes of QueueForge.
 
 They ensure the platform is reliable, scalable, secure, maintainable, observable, and extensible while providing a strong foundation for future AI and Machine Learning enhancements.

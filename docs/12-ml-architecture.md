@@ -1,4 +1,4 @@
-# QueueFlow - Machine Learning Architecture
+# QueueForge - Machine Learning Architecture
 
 ## Version
 
@@ -8,7 +8,7 @@
 
 # 1. Purpose
 
-This document defines the Machine Learning (ML) architecture of QueueFlow.
+This document defines the Machine Learning (ML) architecture of QueueForge.
 
 The ML Service provides predictive intelligence by analyzing historical operational data to improve system performance, worker selection, queue management, and failure prevention.
 
@@ -18,7 +18,7 @@ Unlike the AI Service, which generates explanations and recommendations using La
 
 # 2. ML Overview
 
-The ML Service continuously learns from QueueFlow's operational data.
+The ML Service continuously learns from QueueForge's operational data.
 
 Its primary goal is to optimize the platform by predicting future behavior before problems occur.
 
@@ -45,7 +45,7 @@ The Machine Learning Service aims to:
 # 4. High-Level Architecture
 
 ```text
-                  QueueFlow Platform
+                  QueueForge Platform
                           │
         ┌─────────────────┼─────────────────┐
         │                 │                 │
@@ -429,7 +429,7 @@ The ML Service follows these principles:
 * Models remain replaceable.
 * Training and prediction are separated.
 * Cached predictions improve performance.
-* ML failures must never stop QueueFlow.
+* ML failures must never stop QueueForge.
 
 ---
 
@@ -442,14 +442,14 @@ The following architectural decisions were made:
 * Models are loaded independently from application code.
 * Redis caches prediction results.
 * Training occurs outside production request handling.
-* QueueFlow remains operational even if the ML Service is unavailable.
+* QueueForge remains operational even if the ML Service is unavailable.
 
 ---
 
 # Summary
 
-The Machine Learning Service provides predictive intelligence for QueueFlow by analyzing historical operational data and generating real-time predictions.
+The Machine Learning Service provides predictive intelligence for QueueForge by analyzing historical operational data and generating real-time predictions.
 
 Rather than replacing business logic, the ML Service supports smarter operational decisions through failure prediction, worker recommendation, execution time estimation, queue forecasting, retry optimization, and anomaly detection.
 
-Its modular design, model abstraction, optimized prediction pipeline, and integration with QueueFlow's infrastructure make it a scalable and maintainable component of the platform's intelligent architecture.
+Its modular design, model abstraction, optimized prediction pipeline, and integration with QueueForge's infrastructure make it a scalable and maintainable component of the platform's intelligent architecture.

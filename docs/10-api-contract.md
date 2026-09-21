@@ -1,4 +1,4 @@
-# QueueFlow - API Contract
+# QueueForge - API Contract
 
 ## Version
 
@@ -8,7 +8,7 @@
 
 # 1. Purpose
 
-This document defines the REST API contract for QueueFlow.
+This document defines the REST API contract for QueueForge.
 
 It specifies:
 
@@ -26,7 +26,7 @@ The API contract serves as the agreement between backend services and API consum
 
 # 2. API Design Principles
 
-QueueFlow APIs follow these principles:
+QueueForge APIs follow these principles:
 
 * RESTful Design
 * Consistent Naming
@@ -54,7 +54,7 @@ Future versions:
 
 # 4. Authentication
 
-QueueFlow uses JWT Authentication.
+QueueForge uses JWT Authentication.
 
 Protected endpoints require:
 
@@ -497,7 +497,7 @@ Each error code should have a documented meaning.
 
 # 18. API Versioning
 
-QueueFlow uses URI versioning.
+QueueForge uses URI versioning.
 
 Examples:
 
@@ -526,6 +526,6 @@ Documentation must remain synchronized with implementation.
 
 # Summary
 
-The QueueFlow API Contract provides a standardized and versioned interface for interacting with the platform.
+The QueueForge API Contract provides a standardized and versioned interface for interacting with the platform.
 
 By following REST principles, consistent response structures, and clear validation rules, the APIs remain predictable, maintainable, and easy to integrate for clients, testing tools, and future frontend applications.

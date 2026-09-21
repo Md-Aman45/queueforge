@@ -1,4 +1,4 @@
-# QueueFlow - Worker Architecture
+# QueueForge - Worker Architecture
 
 ## Version
 
@@ -8,7 +8,7 @@
 
 # 1. Purpose
 
-This document describes the internal architecture of QueueFlow workers.
+This document describes the internal architecture of QueueForge workers.
 
 Workers are responsible for consuming jobs from RabbitMQ, executing business logic, handling failures, updating job status, and reporting operational metrics.
 
@@ -18,7 +18,7 @@ Every worker follows the same architectural principles regardless of business do
 
 # 2. Worker Types
 
-QueueFlow Version 1 contains the following workers.
+QueueForge Version 1 contains the following workers.
 
 | Worker               | Responsibility                          |
 | -------------------- | --------------------------------------- |
@@ -135,7 +135,7 @@ The Consumer never contains business logic.
 
 The Processor Module executes business logic.
 
-QueueFlow uses the **Strategy Design Pattern**.
+QueueForge uses the **Strategy Design Pattern**.
 
 Example:
 
@@ -436,8 +436,8 @@ These features are intentionally excluded from Version 1.
 
 # Summary
 
-Workers are the execution engine of QueueFlow.
+Workers are the execution engine of QueueForge.
 
 Each worker is an independent, stateless processing service responsible for consuming jobs, executing business logic through specialized processors, handling failures, maintaining operational state, and exporting metrics.
 
-This architecture enables QueueFlow to process large volumes of asynchronous jobs while remaining scalable, fault tolerant, maintainable, and easy to extend.
+This architecture enables QueueForge to process large volumes of asynchronous jobs while remaining scalable, fault tolerant, maintainable, and easy to extend.
